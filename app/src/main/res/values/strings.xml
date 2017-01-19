@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MemCreator</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="post_mem">Write your memory</string>
+    <string name="browse">Browse</string>
+    <string name="create_memory">Create Memory</string>
+    <string name="create_a_new_memory">Create a new memory</string>
+</resources>
