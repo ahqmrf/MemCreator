@@ -1,43 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_view_memory"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.lenovo.memcreator.activities.ViewMemory">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp">
-
-        <Button
-            android:id="@+id/btn_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@color/colorPrimary"
-            android:text="@string/edit"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            tools:ignore="RtlHardcoded"
-            android:layout_marginRight="10dp"/>
-
-        <Button
-            android:id="@+id/btn_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="@color/colorPrimary"
-            android:text="Delete"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            tools:ignore="RtlHardcoded" />
-    </LinearLayout>
 
     <TextView
         android:id="@+id/view_memory_name"
@@ -55,7 +23,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,15 +63,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="30dp"
                 android:layout_marginTop="10dp"
                 android:text="@string/memory_text"
-                android:textColor="@color/lightBlue" />
+                android:textColor="@color/lightBlue"
+                android:layout_marginBottom="60dp"/>
 
         </LinearLayout>
-
-
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:weightSum="2">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:textAllCaps="false"
+            android:text="Edit"
+            android:textColor="#ffffff"
+            tools:ignore="RtlHardcoded"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            tools:ignore="RtlHardcoded"
+            android:layout_weight="1"/>
+    </LinearLayout>
+</FrameLayout>
