@@ -88,9 +88,9 @@
             android:layout_gravity="right"
             android:background="@color/colorPrimary"
             android:textAllCaps="false"
-            android:text="Edit"
+            android:text="@string/edit_mem"
             android:textColor="#ffffff"
-            tools:ignore="RtlHardcoded"
+            tools:ignore="ButtonStyle,RtlHardcoded"
             android:layout_marginRight="5dp"
             android:layout_weight="1"/>
 
@@ -100,10 +100,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="@color/colorPrimary"
-            android:text="Delete"
+            android:text="@string/delete"
             android:textAllCaps="false"
             android:textColor="#ffffff"
-            tools:ignore="RtlHardcoded"
+            tools:ignore="ButtonStyle,RtlHardcoded"
             android:layout_weight="1"/>
     </LinearLayout>
 </FrameLayout>

@@ -48,7 +48,8 @@
                 android:scrollbars="vertical"
                 android:textColor="#c2000000"
                 android:background="@drawable/edit_text_border"
-                android:layout_weight="5"/>
+                android:layout_weight="5"
+                tools:ignore="RtlHardcoded" />
 
         </LinearLayout>
 
