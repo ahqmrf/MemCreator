@@ -8,5 +8,18 @@
     <string name="post_mem">Write your memory</string>
     <string name="browse">Browse</string>
     <string name="create_memory">Create Memory</string>
-    <string name="create_a_new_memory">Create a new memory</string>
+    <string name="create_a_new_memory"><b>Create a new memory</b></string>
+    <string name="capture">Capture</string>
+    <string name="write_something">write something</string>
+    <string name="memory_name">Name:</string>
+    <string name="mem_title">Memory Title will be here, maximum 30 lines</string>
+    <string name="mem_text">Memory description\nalot things</string>
+    <string name="refresh">Refresh</string>
+    <string name="mem_date">mem_date</string>
+    <string name="mem_time">mem_time</string>
+    <string name="view_memory_name"><b>Memory Name</b></string>
+    <string name="memory_date">Memory Date</string>
+    <string name="memory_time">Memory Time</string>
+    <string name="memory_text">Memory Text</string>
+    <string name="edit">Edit</string>
 </resources>

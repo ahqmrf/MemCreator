@@ -23,7 +23,39 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:weightSum="8"
+            tools:ignore="DisableBaselineAlignment">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="@string/memory_name"
+                android:textSize="17sp"/>
+
+            <EditText
+                android:id="@+id/memory_name"
+                android:layout_marginLeft="15dp"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:gravity="top"
+                android:textCursorDrawable="@null"
+                android:inputType="textMultiLine"
+                android:textSize="16sp"
+                android:padding="5dp"
+                android:scrollbars="vertical"
+                android:textColor="#c2000000"
+                android:background="@drawable/edit_text_border"
+                android:layout_weight="5"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
             android:orientation="horizontal"
             android:weightSum="8"
             tools:ignore="DisableBaselineAlignment">
@@ -33,7 +65,8 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:layout_weight="3"
-                android:weightSum="7">
+                android:layout_marginTop="5dp"
+                android:weightSum="10">
 
                 <ImageView
                     android:id="@+id/image"
@@ -41,7 +74,7 @@
                     android:layout_height="0dp"
                     android:src="@drawable/no_image"
                     android:scaleType="centerCrop"
-                    android:layout_weight="5"
+                    android:layout_weight="6"
                     android:contentDescription=""
                     tools:ignore="ContentDescription,NestedWeights" />
 
@@ -54,12 +87,21 @@
                     android:layout_weight="2"
                     />
 
+                <Button
+                    android:id="@+id/btn_capture_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:text="@string/capture"
+                    android:textAllCaps="false"
+                    android:layout_weight="2"
+                    />
+
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="150dp"
+                android:layout_height="220dp"
                 android:layout_weight="5"
                 android:orientation="vertical"
                 android:layout_marginLeft="15dp"
@@ -70,6 +112,7 @@
                     android:text="@string/post_mem"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
+                    android:textSize="17sp"
                     />
 
                 <EditText
@@ -82,7 +125,6 @@
                     android:inputType="textMultiLine"
                     android:textSize="16sp"
                     android:padding="5dp"
-                    android:hint="write something"
                     android:scrollbars="vertical"
                     android:textColor="#c2000000"
                     android:background="@drawable/edit_text_border"/>
@@ -92,6 +134,7 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_create_memory"
             android:layout_marginTop="10dp"
             android:text="@string/create_memory"
             android:layout_width="match_parent"

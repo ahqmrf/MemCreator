@@ -3,6 +3,7 @@
     package="com.example.lenovo.memcreator">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.SettingsActivity"></activity>
+        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.ViewMemory"></activity>
     </application>
 
 </manifest>

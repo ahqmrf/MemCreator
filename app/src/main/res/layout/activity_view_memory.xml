@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_view_memory"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.lenovo.memcreator.activities.ViewMemory">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="right"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp">
+
+        <Button
+            android:id="@+id/btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:text="@string/edit"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            tools:ignore="RtlHardcoded"
+            android:layout_marginRight="10dp"/>
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@color/colorPrimary"
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            tools:ignore="RtlHardcoded" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/view_memory_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/list_divider"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="@string/view_memory_name"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="ScrollViewSize">
+
+            <ImageView
+                android:id="@+id/view_memory_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:src="@drawable/moments"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/view_memory_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@string/memory_date" />
+
+            <TextView
+                android:id="@+id/view_memory_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="@string/memory_time" />
+
+            <TextView
+                android:id="@+id/view_memory_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/memory_text"
+                android:textColor="@color/lightBlue" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.adapters.HomePagerAdapter;
+import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.fragments.CreateMemoryFragment;
 import com.example.lenovo.memcreator.fragments.FeedsFragment;
 import com.example.lenovo.memcreator.fragments.GalleryFragment;
@@ -25,10 +26,14 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_note_add_white_48dp,
             R.drawable.ic_photo_album_white_48dp};
 
+    private MyDatabaseManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        manager = new MyDatabaseManager(this, null, null, 1);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
