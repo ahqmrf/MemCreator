@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.activities.EditingMemoryActivity;
+import com.example.lenovo.memcreator.activities.ViewMemory;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.objects.Memory;
 
@@ -134,10 +136,10 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         memory.setPics(pics);
         memory.setText(text);
         manager.addMemory(memory);
-
-        ViewPager pager = (ViewPager)getActivity().findViewById(R.id.pager);
-
         initInputs();
+        Intent intent = new Intent(getActivity(), EditingMemoryActivity.class);
+        intent.putExtra("memory", memory);
+        startActivity(intent);
     }
 
     private void initInputs() {

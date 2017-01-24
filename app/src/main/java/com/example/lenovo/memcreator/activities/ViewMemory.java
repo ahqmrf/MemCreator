@@ -104,7 +104,16 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             case R.id.btn_delete:
                 promptConfirmation();
                 break;
+            case R.id.btn_edit:
+                editMemory();
+                break;
         }
+    }
+
+    private void editMemory() {
+        Intent intent = new Intent(ViewMemory.this, EditingMemoryActivity.class);
+        intent.putExtra("memory", memory);
+        startActivity(intent);
     }
 
     private void promptConfirmation() {
