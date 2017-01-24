@@ -138,8 +138,6 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         ViewPager pager = (ViewPager)getActivity().findViewById(R.id.pager);
 
         initInputs();
-
-        pager.setCurrentItem(0);
     }
 
     private void initInputs() {

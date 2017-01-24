@@ -1,6 +1,7 @@
 package com.example.lenovo.memcreator.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -45,10 +46,12 @@ public class PromptDeleteConfirmationActivity extends Activity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
+                startActivity(new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class));
                 finish();
                 break;
             case R.id.btn_confirm:
                 deleteMemory();
+                startActivity(new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class));
                 finish();
                 break;
         }
