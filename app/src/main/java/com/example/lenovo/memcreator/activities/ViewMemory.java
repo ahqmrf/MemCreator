@@ -12,11 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.objects.Memory;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 
 public class ViewMemory extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,18 +24,23 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     private TextView memoryTime;
     private TextView memoryText;
     private Button deleteBtn;
+    private Button editBtn;
+    private Memory memory;
 
     private int width = 350;
     private int height = 350;
 
+    private MyDatabaseManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        manager = new MyDatabaseManager(this, null, null, 1);
         setContentView(R.layout.activity_view_memory);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Memory memory = getIntent().getParcelableExtra("memory_object");
+        memory = getIntent().getParcelableExtra("memory_object");
 
         memoryName = (TextView) findViewById(R.id.view_memory_name);
         imageView = (ImageView) findViewById(R.id.view_memory_icon);
@@ -46,6 +49,9 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         memoryText = (TextView) findViewById(R.id.view_memory_text);
         deleteBtn = (Button) findViewById(R.id.btn_delete);
         deleteBtn.setOnClickListener(this);
+
+        editBtn = (Button) findViewById(R.id.btn_edit);
+        editBtn.setOnClickListener(this);
 
         memoryName.setText(memory.getName());
         memoryDate.setText("Date: " + memory.getDate());
@@ -103,6 +109,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
 
     private void promptConfirmation() {
         Intent intent = new Intent(ViewMemory.this, PromptDeleteConfirmationActivity.class);
+        intent.putExtra("memory", memory);
         startActivity(intent);
     }
 }

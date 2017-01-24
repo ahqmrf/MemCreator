@@ -5,12 +5,16 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.database.MyDatabaseManager;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private MyDatabaseManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        manager = new MyDatabaseManager(this, null, null, 1);
         setContentView(R.layout.activity_profile);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

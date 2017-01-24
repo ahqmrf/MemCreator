@@ -3,14 +3,17 @@ package com.example.lenovo.memcreator.activities;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.database.MyDatabaseManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private MyDatabaseManager manager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        manager = new MyDatabaseManager(this, null, null, 1);
         setContentView(R.layout.activity_settings);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -25,4 +28,5 @@ public class SettingsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

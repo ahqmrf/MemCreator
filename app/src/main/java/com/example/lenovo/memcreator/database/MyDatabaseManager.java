@@ -61,9 +61,9 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteMemory(int memoryId) {
+    public void deleteMemory(String time) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_MEMORY + " WHERE " + COLUMN_ID + " = " + memoryId + ";");
+        db.execSQL("DELETE FROM " + TABLE_MEMORY + " WHERE " + COLUMN_TIME + " = '" + time + "';");
     }
 
     public ArrayList<Memory> getMemory() {
