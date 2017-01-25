@@ -17,7 +17,6 @@ public class GalleryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
 
         // TO DO
-
         return view;
     }
 }

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -25,8 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.activities.EditingMemoryActivity;
-import com.example.lenovo.memcreator.activities.ViewMemory;
+import com.example.lenovo.memcreator.activities.AddPhotosToMemoryActivity;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.objects.Memory;
 
@@ -133,11 +131,11 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         memory.setDate(sdf.format(date).toString());
         sdf = new SimpleDateFormat("HH:mm:ss");
         memory.setTime(sdf.format(date).toString());
-        memory.setPics(pics);
+        memory.setIcon(pics);
         memory.setText(text);
         manager.addMemory(memory);
         initInputs();
-        Intent intent = new Intent(getActivity(), EditingMemoryActivity.class);
+        Intent intent = new Intent(getActivity(), AddPhotosToMemoryActivity.class);
         intent.putExtra("memory", memory);
         startActivity(intent);
     }

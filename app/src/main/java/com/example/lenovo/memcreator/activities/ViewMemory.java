@@ -26,6 +26,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     private Button deleteBtn;
     private Button editBtn;
     private Memory memory;
+    private ImageView photo;
 
     private int width = 350;
     private int height = 350;
@@ -58,8 +59,8 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         memoryText.setText(memory.getText());
         memoryTime.setText("Time: " + memory.getTime());
 
-        if(memory.getPics() != null) {
-            imageView.setImageBitmap(BitmapFactory.decodeFile(memory.getPics()));
+        if(memory.getIcon() != null) {
+            imageView.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
         } else {
             imageView.setImageResource(R.drawable.moments);
         }
@@ -85,6 +86,17 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
 
         imageView.getLayoutParams().height = screenHeight;
         imageView.getLayoutParams().width = screenWidth;
+
+        photo = (ImageView) findViewById(R.id.photo);
+        if(memory.getPhotos().size() == 0) {
+            photo.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
+        }
+        else {
+            photo.setImageBitmap(BitmapFactory.decodeFile(memory.getPhotos().get(0)));
+        }
+
+        photo.getLayoutParams().height = screenHeight;
+        photo.getLayoutParams().width = screenWidth;
 
     }
 

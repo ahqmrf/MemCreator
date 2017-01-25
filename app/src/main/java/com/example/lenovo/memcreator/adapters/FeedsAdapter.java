@@ -3,21 +3,23 @@ package com.example.lenovo.memcreator.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.activities.EditingMemoryActivity;
+import com.example.lenovo.memcreator.activities.PromptDeleteConfirmationActivity;
 import com.example.lenovo.memcreator.activities.ViewMemory;
 import com.example.lenovo.memcreator.objects.Memory;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -49,8 +51,8 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if(itemList.size() > 0) {
             Memory memory = itemList.get(position);
-            if(memory.getPics() != null) {
-                holder.memoryIcon.setImageBitmap(BitmapFactory.decodeFile(memory.getPics()));
+            if(memory.getIcon() != null) {
+                holder.memoryIcon.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
             } else {
                 holder.memoryIcon.setImageResource(R.drawable.moments);
             }
@@ -64,9 +66,6 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             builder.append(tokens[1] + "/");
             builder.append(tokens[0].charAt(2) + "" + tokens[0].charAt(3));
 
-
-            holder.memoryDate.setText(builder.toString());
-            holder.memoryTime.setText(memory.getTime());
         }
     }
 
@@ -80,8 +79,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         public ImageView memoryIcon;
         public TextView memoryTitle;
         public TextView memoryDescription;
-        public TextView memoryDate;
-        public TextView memoryTime;
+        public Button moreBtn;
         public LinearLayout layout;
 
         public MyViewHolder(View itemView) {
@@ -90,10 +88,10 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             memoryIcon = (ImageView) itemView.findViewById(R.id.memory_icon);
             memoryTitle = (TextView) itemView.findViewById(R.id.memory_title);
             memoryDescription = (TextView) itemView.findViewById(R.id.memory_description);
-            memoryDate = (TextView) itemView.findViewById(R.id.memory_date);
-            memoryTime = (TextView) itemView.findViewById(R.id.memory_time);
+            moreBtn = (Button) itemView.findViewById(R.id.btn_more);
             layout = (LinearLayout) itemView.findViewById(R.id.item);
             layout.setOnClickListener(this);
+            moreBtn.setOnClickListener(this);
         }
 
         @Override
@@ -102,12 +100,50 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
                 case R.id.item :
                     viewMemory(itemList.get(getAdapterPosition()));
                     break;
+                case R.id.btn_more:
+                    showPopUp();
+                    break;
             }
+        }
+
+        private void showPopUp() {
+            PopupMenu popupMenu = new PopupMenu(context, layout);
+            popupMenu.inflate(R.menu.item_context_menu);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.mi_view:
+                            viewMemory(itemList.get(getAdapterPosition()));
+                            break;
+                        case R.id.mi_edit:
+                            editMemory(itemList.get(getAdapterPosition()));
+                            break;
+                        case R.id.mi_delete:
+                            deleteMemory(itemList.get(getAdapterPosition()));
+                            break;
+                    }
+                    return false;
+                }
+            });
+            popupMenu.show();
         }
 
         private void viewMemory(Memory memory) {
             Intent intent = new Intent(context, ViewMemory.class);
             intent.putExtra("memory_object", memory);
+            context.startActivity(intent);
+        }
+
+        private void editMemory(Memory memory) {
+            Intent intent = new Intent(context, EditingMemoryActivity.class);
+            intent.putExtra("memory", memory);
+            context.startActivity(intent);
+        }
+
+        private void deleteMemory(Memory memory) {
+            Intent intent = new Intent(context, PromptDeleteConfirmationActivity.class);
+            intent.putExtra("memory", memory);
             context.startActivity(intent);
         }
     }

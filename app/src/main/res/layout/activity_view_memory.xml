@@ -70,6 +70,13 @@
                 android:text="@string/memory_text"
                 android:textColor="@color/colorPrimaryDark" />
 
+            <ImageView
+                android:id="@+id/photo"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_image"/>
+
         </LinearLayout>
     </ScrollView>
 

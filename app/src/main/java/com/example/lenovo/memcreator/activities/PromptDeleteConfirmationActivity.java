@@ -60,7 +60,7 @@ public class PromptDeleteConfirmationActivity extends Activity implements View.O
 
     private void deleteMemory() {
         Memory memory = getIntent().getParcelableExtra("memory");
-        manager.deleteMemory(memory.getTime());
+        manager.deleteMemory(memory);
         Toast.makeText(getApplicationContext(), "Successfully deleted", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);

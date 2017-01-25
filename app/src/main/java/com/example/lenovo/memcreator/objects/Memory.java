@@ -3,6 +3,8 @@ package com.example.lenovo.memcreator.objects;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 /**
  * Created by Lenovo on 1/20/2017.
  */
@@ -17,7 +19,7 @@ public class Memory implements Parcelable{
         time = in.readString();
         date = in.readString();
         text = in.readString();
-        pics = in.readString();
+        icon = in.readString();
     }
 
     public static final Creator<Memory> CREATOR = new Creator<Memory>() {
@@ -43,10 +45,23 @@ public class Memory implements Parcelable{
     private String time;
     private String date;
     private String text;
-    private String pics;
+    private String icon;
+    private ArrayList<String> photos = new ArrayList<>();
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
+    }
 
     public Memory() {
 
+    }
+
+    public void addPhoto(String photo) {
+        photos.add(photo);
     }
 
     public int getId() {
@@ -81,12 +96,12 @@ public class Memory implements Parcelable{
         this.text = text;
     }
 
-    public String getPics() {
-        return pics;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setPics(String pics) {
-        this.pics = pics;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     @Override
@@ -97,7 +112,7 @@ public class Memory implements Parcelable{
         builder.append(date + "\n");
         builder.append(time + "\n");
         builder.append(text + "\n");
-        builder.append(pics + "\n");
+        builder.append(icon + "\n");
 
         return builder.toString();
     }
@@ -114,6 +129,7 @@ public class Memory implements Parcelable{
         dest.writeString(time);
         dest.writeString(date);
         dest.writeString(text);
-        dest.writeString(pics);
+        dest.writeString(icon);
+        dest.writeStringList(photos);
     }
 }
