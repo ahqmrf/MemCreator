@@ -82,4 +82,9 @@ public class MainActivity extends AppCompatActivity {
     public void exitApp(MenuItem item) {
         System.exit(0);
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
 }

@@ -46,12 +46,13 @@ public class PromptDeleteConfirmationActivity extends Activity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_cancel:
-                startActivity(new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class));
+                Intent intent = new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
                 finish();
                 break;
             case R.id.btn_confirm:
                 deleteMemory();
-                startActivity(new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class));
                 finish();
                 break;
         }
@@ -61,5 +62,8 @@ public class PromptDeleteConfirmationActivity extends Activity implements View.O
         Memory memory = getIntent().getParcelableExtra("memory");
         manager.deleteMemory(memory.getTime());
         Toast.makeText(getApplicationContext(), "Successfully deleted", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(PromptDeleteConfirmationActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
     }
 }

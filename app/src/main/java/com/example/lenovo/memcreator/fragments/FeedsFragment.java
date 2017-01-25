@@ -66,4 +66,9 @@ public class FeedsFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
+    }
 }
