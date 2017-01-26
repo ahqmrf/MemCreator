@@ -12,102 +12,57 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.database.MyDatabaseManager;
-import com.example.lenovo.memcreator.objects.Memory;
+import com.example.lenovo.memcreator.models.Memory;
 
 
 public class ViewMemory extends AppCompatActivity implements View.OnClickListener {
 
     private TextView memoryName;
-    private ImageView imageView;
+    private ImageView memoryIcon;
     private TextView memoryDate;
     private TextView memoryTime;
     private TextView memoryText;
     private Button deleteBtn;
     private Button editBtn;
     private Memory memory;
-    private ImageView photo;
 
     private int width = 350;
     private int height = 350;
+    private int preferredWidth = 350;
+    private int preferredHeight = 350;
 
-    private MyDatabaseManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        manager = new MyDatabaseManager(this, null, null, 1);
         setContentView(R.layout.activity_view_memory);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        memory = getIntent().getParcelableExtra("memory_object");
+        initExtras();
+        initViews();
+        setUpListeners();
+        manipulateViews();
 
+    }
+
+    private void initExtras() {
+        memory = getIntent().getParcelableExtra("memory_object");
+    }
+
+    private void initViews() {
         memoryName = (TextView) findViewById(R.id.view_memory_name);
-        imageView = (ImageView) findViewById(R.id.view_memory_icon);
+        memoryIcon = (ImageView) findViewById(R.id.view_memory_icon);
         memoryDate = (TextView) findViewById(R.id.view_memory_date);
         memoryTime = (TextView) findViewById(R.id.view_memory_time);
         memoryText = (TextView) findViewById(R.id.view_memory_text);
         deleteBtn = (Button) findViewById(R.id.btn_delete);
-        deleteBtn.setOnClickListener(this);
-
         editBtn = (Button) findViewById(R.id.btn_edit);
-        editBtn.setOnClickListener(this);
-
-        memoryName.setText(memory.getName());
-        memoryDate.setText("Date: " + memory.getDate());
-        memoryText.setText(memory.getText());
-        memoryTime.setText("Time: " + memory.getTime());
-
-        if(memory.getIcon() != null) {
-            imageView.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
-        } else {
-            imageView.setImageResource(R.drawable.moments);
-        }
-
-        Display display = getWindowManager().getDefaultDisplay();
-
-        height = imageView.getDrawable().getIntrinsicHeight();
-        width = imageView.getDrawable().getIntrinsicWidth();
-
-        int screenWidth = display.getWidth();
-        int screenHeight = display.getWidth();
-
-        System.out.println(screenHeight + " " + screenWidth);
-
-        if(width >= height) {
-            float ratio = 1f * screenWidth / width;
-            screenHeight = (int)(1f * height * ratio);
-        }
-        else {
-            float ratio = 1f * screenHeight / height;
-            screenWidth = (int)(1f * width * ratio);
-        }
-
-        imageView.getLayoutParams().height = screenHeight;
-        imageView.getLayoutParams().width = screenWidth;
-
-        photo = (ImageView) findViewById(R.id.photo);
-        if(memory.getPhotos().size() == 0) {
-            photo.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
-        }
-        else {
-            photo.setImageBitmap(BitmapFactory.decodeFile(memory.getPhotos().get(0)));
-        }
-
-        photo.getLayoutParams().height = screenHeight;
-        photo.getLayoutParams().width = screenWidth;
-
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+    private void setUpListeners() {
+        deleteBtn.setOnClickListener(this);
+        editBtn.setOnClickListener(this);
     }
 
     @Override
@@ -132,5 +87,63 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         Intent intent = new Intent(ViewMemory.this, PromptDeleteConfirmationActivity.class);
         intent.putExtra("memory", memory);
         startActivity(intent);
+    }
+
+    private void manipulateViews() {
+        memoryName.setText(memory.getName());
+        memoryDate.setText("Date: " + memory.getDate());
+        memoryText.setText(memory.getText());
+        memoryTime.setText("Time: " + memory.getTime());
+
+        measureSizeForImageView();
+        setMemoryIcon();
+        setMemoryPhotos();
+    }
+
+    private void measureSizeForImageView() {
+        Display display = getWindowManager().getDefaultDisplay();
+
+        height = memoryIcon.getDrawable().getIntrinsicHeight();
+        width = memoryIcon.getDrawable().getIntrinsicWidth();
+
+        int screenWidth = display.getWidth();
+        int screenHeight = display.getWidth();
+
+        if(width >= height) {
+            float ratio = 1f * screenWidth / width;
+            screenHeight = (int)(1f * height * ratio);
+        }
+        else {
+            float ratio = 1f * screenHeight / height;
+            screenWidth = (int)(1f * width * ratio);
+        }
+
+        preferredHeight = screenHeight;
+        preferredWidth = screenWidth;
+    }
+
+    private void setMemoryIcon() {
+        if(memory.getIcon() != null) {
+            memoryIcon.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
+        } else {
+            memoryIcon.setImageResource(R.drawable.moments);
+        }
+
+        memoryIcon.getLayoutParams().height = preferredHeight;
+        memoryIcon.getLayoutParams().width = preferredWidth;
+    }
+
+    private void setMemoryPhotos() {
+        // TO DO
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

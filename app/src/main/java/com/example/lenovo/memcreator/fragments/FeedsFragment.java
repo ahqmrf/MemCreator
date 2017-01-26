@@ -1,8 +1,6 @@
 package com.example.lenovo.memcreator.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,12 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.adapters.FeedsAdapter;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
-import com.example.lenovo.memcreator.objects.Memory;
+import com.example.lenovo.memcreator.models.Memory;
 
 import java.util.ArrayList;
 

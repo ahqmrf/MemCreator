@@ -1,4 +1,4 @@
-package com.example.lenovo.memcreator.objects;
+package com.example.lenovo.memcreator.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

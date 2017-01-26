@@ -11,6 +11,7 @@ public class EditingMemoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Edit Memory");
         setContentView(R.layout.activity_editing_memory);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

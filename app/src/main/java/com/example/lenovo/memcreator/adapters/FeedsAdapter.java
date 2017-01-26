@@ -18,7 +18,7 @@ import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.EditingMemoryActivity;
 import com.example.lenovo.memcreator.activities.PromptDeleteConfirmationActivity;
 import com.example.lenovo.memcreator.activities.ViewMemory;
-import com.example.lenovo.memcreator.objects.Memory;
+import com.example.lenovo.memcreator.models.Memory;
 
 import java.util.ArrayList;
 
@@ -51,14 +51,15 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, int position) {
         if(itemList.size() > 0) {
             Memory memory = itemList.get(position);
+
             if(memory.getIcon() != null) {
                 holder.memoryIcon.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
             } else {
                 holder.memoryIcon.setImageResource(R.drawable.moments);
             }
+
             holder.memoryTitle.setText(memory.getName());
             holder.memoryDescription.setText(memory.getText());
-
 
             StringBuilder builder = new StringBuilder();
             String tokens[] = memory.getDate().split("-");

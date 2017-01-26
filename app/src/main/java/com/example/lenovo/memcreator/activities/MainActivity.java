@@ -26,29 +26,37 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_note_add_white_48dp,
             R.drawable.ic_photo_album_white_48dp};
 
-    private MyDatabaseManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        manager = new MyDatabaseManager(this, null, null, 1);
         setContentView(R.layout.activity_main);
 
+        initViews();
+        manipulateViews();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void initViews() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+    }
+
+    private void manipulateViews() {
         mDrawerLayout.setDrawerListener(mToggle);
         mToggle.syncState();
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         setUpViewPager(mViewPager);
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+
         mTabLayout.setupWithViewPager(mViewPager);
 
         for (int position = 0; position < mTabLayout.getTabCount(); position++) {
             mTabLayout.getTabAt(position).setIcon(tabIconResIds[position]);
         }
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void setUpViewPager(ViewPager viewPager) {

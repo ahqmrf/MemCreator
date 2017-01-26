@@ -11,22 +11,20 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.AddPhotosToMemoryActivity;
+import com.example.lenovo.memcreator.activities.PromptToAddPhotosActivity;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
-import com.example.lenovo.memcreator.objects.Memory;
+import com.example.lenovo.memcreator.models.Memory;
 
 import org.apache.commons.io.FileUtils;
 
@@ -39,7 +37,7 @@ import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
-public class CreateMemoryFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener, TextView.OnEditorActionListener {
+public class CreateMemoryFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     private static final int BROWSE_GALLERY_REQUEST_CODE = 100;
@@ -67,10 +65,8 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         image = (ImageView) view.findViewById(R.id.image);
         memoryText = (EditText) view.findViewById(R.id.memory_text);
         memoryText.setOnFocusChangeListener(this);
-        memoryText.setOnEditorActionListener(this);
         memoryName = (EditText) view.findViewById(R.id.memory_name);
         memoryName.setOnFocusChangeListener(this);
-        memoryName.setOnEditorActionListener(this);
         captureBtn = (Button) view.findViewById(R.id.btn_capture_image);
         captureBtn.setOnClickListener(this);
 
@@ -135,7 +131,7 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         memory.setText(text);
         manager.addMemory(memory);
         initInputs();
-        Intent intent = new Intent(getActivity(), AddPhotosToMemoryActivity.class);
+        Intent intent = new Intent(getActivity(), PromptToAddPhotosActivity.class);
         intent.putExtra("memory", memory);
         startActivity(intent);
     }
@@ -241,16 +237,5 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
                 hideKeyboard(v);
             }
         }
-    }
-
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
-            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            return true;
-        }
-        return false;
-
     }
 }

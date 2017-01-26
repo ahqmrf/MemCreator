@@ -36,7 +36,8 @@
         <activity
             android:name=".activities.EditingMemoryActivity"
             android:label="Edit Memory" />
-        <activity android:name=".activities.AddPhotosToMemoryActivity"></activity>
+        <activity android:name=".activities.AddPhotosToMemoryActivity" />
+        <activity android:name=".activities.PromptToAddPhotosActivity"></activity>
     </application>
 
 </manifest>
