@@ -19,6 +19,7 @@ import com.example.lenovo.memcreator.activities.EditingMemoryActivity;
 import com.example.lenovo.memcreator.activities.PromptDeleteConfirmationActivity;
 import com.example.lenovo.memcreator.activities.ViewMemory;
 import com.example.lenovo.memcreator.models.Memory;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -53,7 +54,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             Memory memory = itemList.get(position);
 
             if(memory.getIcon() != null) {
-                holder.memoryIcon.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
+                Picasso.with(context).load("file:" + memory.getIcon()).into(holder.memoryIcon);
             } else {
                 holder.memoryIcon.setImageResource(R.drawable.moments);
             }

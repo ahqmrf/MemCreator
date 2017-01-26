@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.models.Memory;
+import com.squareup.picasso.Picasso;
 
 
 public class ViewMemory extends AppCompatActivity implements View.OnClickListener {
@@ -124,7 +125,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
 
     private void setMemoryIcon() {
         if(memory.getIcon() != null) {
-            memoryIcon.setImageBitmap(BitmapFactory.decodeFile(memory.getIcon()));
+            Picasso.with(this).load("file:" + memory.getIcon()).into(memoryIcon);
         } else {
             memoryIcon.setImageResource(R.drawable.moments);
         }

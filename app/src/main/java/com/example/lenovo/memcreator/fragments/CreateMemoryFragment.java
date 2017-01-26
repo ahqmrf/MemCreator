@@ -25,6 +25,7 @@ import com.example.lenovo.memcreator.activities.AddPhotosToMemoryActivity;
 import com.example.lenovo.memcreator.activities.PromptToAddPhotosActivity;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;
+import com.squareup.picasso.Picasso;
 
 import org.apache.commons.io.FileUtils;
 
@@ -192,7 +193,7 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
                     try {
                         FileUtils.copyFile(new File(path), imageName);
                         Toast.makeText(getActivity(), "A copy of the selected image is saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                        image.setImageBitmap(BitmapFactory.decodeFile(imageName.getAbsolutePath()));
+                        Picasso.with(getContext()).load("file:" + imageName.getAbsolutePath()).into(image);
                     }  catch (IOException e) {
                         e.printStackTrace();
                     }

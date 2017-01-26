@@ -15,12 +15,11 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/list_divider"
         android:gravity="center"
         android:padding="10dp"
         android:text="@string/view_memory_name"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp" />
+        android:textSize="25sp" />
 
     <ScrollView
         android:layout_width="match_parent"

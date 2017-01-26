@@ -10,7 +10,7 @@
     <string name="create_memory">Create Memory</string>
     <string name="create_a_new_memory"><b>Create a new memory</b></string>
     <string name="capture">Capture</string>
-    <string name="write_something"><i>write something about your memory</i></string>
+    <string name="write_something"><i>Write something about your memory</i></string>
     <string name="memory_name">Name:</string>
     <string name="mem_title">Memory Title will be here, maximum 30 lines</string>
     <string name="mem_text">Memory description\nalot things</string>
@@ -28,7 +28,7 @@
     <string name="are_you_sure_you_want_to_delete_this_memory">Are you sure you want to delete this memory?</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="hint_memory_name"><i>memory name</i></string>
+    <string name="hint_memory_name"><i>Memory name</i></string>
     <string name="add_icon">Add an icon to your image (optional)</string>
     <string name="do_you_want_to_add_photos_to_this_memory">Do you want to add photos to this memory?</string>
     <string name="no">No</string>
