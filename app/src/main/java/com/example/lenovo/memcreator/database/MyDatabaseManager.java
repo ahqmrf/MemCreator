@@ -17,6 +17,7 @@ import java.util.Collections;
  */
 
 public class MyDatabaseManager extends SQLiteOpenHelper {
+
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "memory.db";
     private static final String TABLE_MEMORY = "memory";
@@ -90,20 +91,28 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM " + TABLE_MEMORY + " WHERE " + COLUMN_TIME + " = '" + memory.getTime() + "';");
         db.execSQL("DELETE FROM " + TABLE_PHOTO + " WHERE " + COLUMN_PHOTO_TIME + " = '" + memory.getTime() + "';");
-        for(String path: memory.getPhotos()) {
-            File file = new File(path);
-            if (file.exists()) {
-                boolean deleted = file.delete();
-                if (deleted) {
-                    System.out.println("Success");
-                }
+        db.close();
+        deleteMemoryIcon(memory);
+        deleteMemoryPhotos(memory);
+    }
+
+    public void deleteMemoryIcon(Memory memory) {
+        if (memory.getIcon() == null || memory.getIcon().equals("") || memory.getIcon().length() == 0)
+            return;
+
+        File file = new File(memory.getIcon());
+        if (file.exists()) {
+            boolean deleted = file.delete();
+            if (deleted) {
+                System.out.println("Success");
             }
         }
-        db.close();
-        if (memory.getIcon() == null || memory.getIcon().equals("") || memory.getIcon().length() == 0)
-            ;
-        else {
-            File file = new File(memory.getIcon());
+    }
+
+    public void deleteMemoryPhotos(Memory memory) {
+        for (String path : memory.getPhotos()) {
+            if (path == null || path.length() == 0) continue;
+            File file = new File(path);
             if (file.exists()) {
                 boolean deleted = file.delete();
                 if (deleted) {
@@ -131,23 +140,33 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
                 memory.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
                 memory.setText(cursor.getString(cursor.getColumnIndex(COLUMN_TEXT)));
                 memory.setIcon(cursor.getString(cursor.getColumnIndex(COLUMN_ICON)));
-                query = "SELECT * FROM " + TABLE_PHOTO + " WHERE " + COLUMN_PHOTO_TIME +
-                        " = '" + time + "';";
-                Cursor cursorPhoto  = db.rawQuery(query, null);
-                try {
-                    while(cursorPhoto.moveToNext()) {
-                        memory.addPhoto(cursorPhoto.getString(cursorPhoto.getColumnIndex(COLUMN_PHOTO_VALUE)));
-                    }
-                } finally {
-                    cursorPhoto.close();
-                }
-
+                memory.setPhotos(getMemoryPhotos(time));
                 memories.add(memory);
             }
         } finally {
             cursor.close();
         }
+
         Collections.reverse(memories);
         return memories;
+    }
+
+    private ArrayList<String> getMemoryPhotos(String time) {
+        ArrayList<String> photos = new ArrayList<>();
+        SQLiteDatabase db = getWritableDatabase();
+
+        String query = "SELECT * FROM " + TABLE_PHOTO + " WHERE " + COLUMN_PHOTO_TIME +
+                " = '" + time + "';";
+        Cursor cursorPhoto = db.rawQuery(query, null);
+
+        try {
+            while (cursorPhoto.moveToNext()) {
+                photos.add(cursorPhoto.getString(cursorPhoto.getColumnIndex(COLUMN_PHOTO_VALUE)));
+            }
+        } finally {
+            cursorPhoto.close();
+        }
+
+        return photos;
     }
 }
