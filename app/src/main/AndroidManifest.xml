@@ -15,11 +15,6 @@
             android:name=".activities.MainActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.ProfileActivity"
@@ -37,7 +32,14 @@
             android:name=".activities.EditingMemoryActivity"
             android:label="Edit Memory" />
         <activity android:name=".activities.AddPhotosToMemoryActivity" />
-        <activity android:name=".activities.PromptToAddPhotosActivity"></activity>
+        <activity android:name=".activities.PromptToAddPhotosActivity" />
+        <activity android:name=".activities.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
