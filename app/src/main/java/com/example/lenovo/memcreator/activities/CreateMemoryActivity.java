@@ -222,11 +222,6 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         return res;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        initInputs();
-    }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
