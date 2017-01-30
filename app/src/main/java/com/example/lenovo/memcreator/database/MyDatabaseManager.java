@@ -22,7 +22,7 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "memory.db";
     private static final String TABLE_MEMORY = "memory";
     private static final String COLUMN_ID = "memory_id";
-    private static final String COLUMN_NAME = "name";
+    private static final String COLUMN_TITLE = "title";
     private static final String COLUMN_TEXT = "text";
     private static final String COLUMN_ICON = "icon";
     private static final String COLUMN_DATE = "date";
@@ -41,7 +41,7 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_MEMORY + "(" +
                 COLUMN_ID + " INTEGER PRIMARY KEY, " +
-                COLUMN_NAME + " TEXT, " +
+                COLUMN_TITLE + " TEXT, " +
                 COLUMN_DATE + " TEXT, " +
                 COLUMN_TIME + " TEXT, " +
                 COLUMN_TEXT + " TEXT, " +
@@ -65,7 +65,7 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
 
     public void addMemory(Memory memory) {
         ContentValues values = new ContentValues();
-        values.put(COLUMN_NAME, memory.getName());
+        values.put(COLUMN_TITLE, memory.getName());
         values.put(COLUMN_DATE, memory.getDate());
         values.put(COLUMN_TIME, memory.getTime());
         values.put(COLUMN_TEXT, memory.getText());
@@ -135,7 +135,7 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
                 memory = new Memory();
                 String time = cursor.getString(cursor.getColumnIndex(COLUMN_TIME));
                 memory.setId(cursor.getColumnIndex(COLUMN_ID));
-                memory.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                memory.setName(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE)));
                 memory.setTime(time);
                 memory.setDate(cursor.getString(cursor.getColumnIndex(COLUMN_DATE)));
                 memory.setText(cursor.getString(cursor.getColumnIndex(COLUMN_TEXT)));

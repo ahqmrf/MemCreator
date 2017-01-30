@@ -2,15 +2,12 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +19,8 @@ import com.example.lenovo.memcreator.models.Memory;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Lenovo on 1/20/2017.
@@ -68,6 +67,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             builder.append(tokens[1] + "/");
             builder.append(tokens[0].charAt(2) + "" + tokens[0].charAt(3));
 
+            holder.memoryDate.setText(builder.toString());
         }
     }
 
@@ -76,24 +76,24 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
         return itemList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
-        public ImageView memoryIcon;
+        public CircleImageView memoryIcon;
         public TextView memoryTitle;
         public TextView memoryDescription;
-        public Button moreBtn;
+        public TextView memoryDate;
         public LinearLayout layout;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            memoryIcon = (ImageView) itemView.findViewById(R.id.memory_icon);
+            memoryIcon = (CircleImageView) itemView.findViewById(R.id.memory_icon);
             memoryTitle = (TextView) itemView.findViewById(R.id.memory_title);
             memoryDescription = (TextView) itemView.findViewById(R.id.memory_description);
-            moreBtn = (Button) itemView.findViewById(R.id.btn_more);
+            memoryDate = (TextView) itemView.findViewById(R.id.memory_date);
             layout = (LinearLayout) itemView.findViewById(R.id.item);
             layout.setOnClickListener(this);
-            moreBtn.setOnClickListener(this);
+            layout.setOnLongClickListener(this);
         }
 
         @Override
@@ -102,14 +102,11 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
                 case R.id.item :
                     viewMemory(itemList.get(getAdapterPosition()));
                     break;
-                case R.id.btn_more:
-                    showPopUp();
-                    break;
             }
         }
 
         private void showPopUp() {
-            PopupMenu popupMenu = new PopupMenu(context, layout);
+            PopupMenu popupMenu = new PopupMenu(context, memoryDescription);
             popupMenu.inflate(R.menu.item_context_menu);
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -147,6 +144,16 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             Intent intent = new Intent(context, PromptDeleteConfirmationActivity.class);
             intent.putExtra("memory", memory);
             context.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            switch (v.getId()) {
+                case R.id.item:
+                    showPopUp();
+                    break;
+            }
+            return true;
         }
     }
 }

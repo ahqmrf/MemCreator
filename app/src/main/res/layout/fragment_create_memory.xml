@@ -30,6 +30,10 @@
                 android:text="@string/create_a_new_memory"
                 android:textSize="20sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/memory_name"/>
 
             <EditText
                 android:id="@+id/memory_name"
@@ -39,12 +43,17 @@
                 android:inputType="textMultiLine"
                 android:padding="5dp"
                 android:scrollbars="horizontal"
-                android:hint="@string/hint_memory_name"
                 android:nextFocusDown="@+id/memory_text"
                 android:textColor="#c2000000"
                 android:textCursorDrawable="@null"
                 android:textSize="16sp"
                 tools:ignore="RtlHardcoded" />
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/write_something"/>
 
             <EditText
                 android:id="@+id/memory_text"
@@ -53,7 +62,6 @@
                 android:background="@drawable/edit_text_border"
                 android:layout_marginTop="10dp"
                 android:inputType="textMultiLine"
-                android:hint="@string/write_something"
                 android:gravity="top"
                 android:minLines="6"
                 android:padding="5dp"
@@ -64,7 +72,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="140dp"
+                android:layout_height="150dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
                 android:weightSum="2"
@@ -106,13 +114,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/browse"
-                        android:textAllCaps="false" />
+                        android:textColor="#ffffff"
+                        android:textAllCaps="false"
+                        android:background="@color/colorPrimaryDark"/>
 
                     <Button
+                        android:layout_marginTop="10dp"
                         android:id="@+id/btn_capture_image"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/capture"
+                        android:textColor="#ffffff"
+                        android:background="@color/colorPrimaryDark"
                         android:textAllCaps="false" />
                 </LinearLayout>
 
@@ -123,7 +136,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@color/colorPrimary"
+                android:background="@color/colorPrimaryDark"
                 android:text="@string/create_memory"
                 android:textAllCaps="false"
                 android:textColor="#ffffff" />

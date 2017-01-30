@@ -1,7 +1,6 @@
 package com.example.lenovo.memcreator.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -21,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.activities.AddPhotosToMemoryActivity;
 import com.example.lenovo.memcreator.activities.PromptToAddPhotosActivity;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;

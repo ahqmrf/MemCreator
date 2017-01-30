@@ -1,7 +1,6 @@
 package com.example.lenovo.memcreator.activities;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
