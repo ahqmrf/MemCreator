@@ -1,4 +1,4 @@
-package com.example.lenovo.memcreator.fragments;
+package com.example.lenovo.memcreator.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,11 +8,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.activities.PromptToAddPhotosActivity;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;
 import com.squareup.picasso.Picasso;
@@ -32,11 +30,13 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
 
-public class CreateMemoryFragment extends Fragment implements View.OnClickListener, View.OnFocusChangeListener {
+/**
+ * Created by Lenovo on 1/30/2017.
+ */
+
+public class CreateMemoryActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener{
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     private static final int BROWSE_GALLERY_REQUEST_CODE = 100;
@@ -51,30 +51,28 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_create_memory, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_memory);
 
-        // TO DO
-
-        selectImageBtn = (Button) view.findViewById(R.id.btn_add_image);
+        selectImageBtn = (Button) findViewById(R.id.btn_add_image);
         selectImageBtn.setOnClickListener(this);
 
 
-        image = (ImageView) view.findViewById(R.id.image);
-        memoryText = (EditText) view.findViewById(R.id.memory_text);
+        image = (ImageView) findViewById(R.id.image);
+        memoryText = (EditText) findViewById(R.id.memory_text);
         memoryText.setOnFocusChangeListener(this);
-        memoryName = (EditText) view.findViewById(R.id.memory_name);
+        memoryName = (EditText) findViewById(R.id.memory_name);
         memoryName.setOnFocusChangeListener(this);
-        captureBtn = (Button) view.findViewById(R.id.btn_capture_image);
+        captureBtn = (Button) findViewById(R.id.btn_capture_image);
         captureBtn.setOnClickListener(this);
 
-        createMemBtn = (Button) view.findViewById(R.id.btn_create_memory);
+        createMemBtn = (Button) findViewById(R.id.btn_create_memory);
         createMemBtn.setOnClickListener(this);
 
-        manager = new MyDatabaseManager(getContext(), null, null, 1);
+        manager = new MyDatabaseManager(this, null, null, 1);
 
-        return view;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -92,22 +90,17 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         }
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-
     private void saveMemory() {
         String text = memoryText.getText().toString();
         String memName = memoryName.getText().toString();
 
         if(memName == null | memName.equals("") | memName.length() == 0) {
-            Toast.makeText(getContext(), "Memory name cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Memory name cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if(text == null | text.equals("") | text.length() == 0) {
-            Toast.makeText(getContext(), "Write something about this memory!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Write something about this memory!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -116,7 +109,7 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         String pics = null;
         if(imageName != null) pics = imageName.getAbsolutePath();
         else {
-            Toast.makeText(getContext(), "You did not select/capture any image.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "You did not select/capture any image.", Toast.LENGTH_SHORT).show();
         }
 
         java.util.Date date = new java.util.Date();
@@ -130,7 +123,7 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         memory.setText(text);
         manager.addMemory(memory);
         initInputs();
-        Intent intent = new Intent(getActivity(), PromptToAddPhotosActivity.class);
+        Intent intent = new Intent(this, PromptToAddPhotosActivity.class);
         intent.putExtra("memory", memory);
         startActivity(intent);
     }
@@ -181,7 +174,7 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
                     String [] tokens = path.split("/");
                     String imageNameOriginal = tokens[tokens.length - 1];
                     String text = "Selected: " + imageNameOriginal;
-                    Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
 
                     File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MemCreator");
                     if(!imagesFolder.exists()) imagesFolder.mkdirs();
@@ -190,8 +183,8 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
 
                     try {
                         FileUtils.copyFile(new File(path), imageName);
-                        Toast.makeText(getActivity(), "A copy of the selected image is saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                        Picasso.with(getContext()).load("file:" + imageName.getAbsolutePath()).into(image);
+                        Toast.makeText(this, "A copy of the selected image is saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                        Picasso.with(this).load("file:" + imageName.getAbsolutePath()).into(image);
                     }  catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -202,16 +195,16 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
         else if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             // TO DO
             if (resultCode == RESULT_OK) {
-                Toast.makeText(getActivity(), "Captured image saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Captured image saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                 image.setImageBitmap(BitmapFactory.decodeFile(imageName.getAbsolutePath()));
             }
             else if (resultCode == RESULT_CANCELED) {
                 // User cancelled the image capture
-                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
             }
             else {
                 // Image capture failed, advise user
-                Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -220,7 +213,7 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
     public String getPathFromURI(Uri contentUri) {
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(contentUri, proj, null, null, null);
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             res = cursor.getString(column_index);
@@ -230,11 +223,32 @@ public class CreateMemoryFragment extends Fragment implements View.OnClickListen
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initInputs();
+    }
+
+    @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if(v.getId() == R.id.memory_text || v.getId() == R.id.memory_name) {
             if (!hasFocus) {
                 hideKeyboard(v);
             }
         }
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

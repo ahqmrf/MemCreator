@@ -1,31 +1,32 @@
 package com.example.lenovo.memcreator.activities;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.adapters.HomePagerAdapter;
+import com.example.lenovo.memcreator.adapters.FeedsAdapter;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
-import com.example.lenovo.memcreator.fragments.CreateMemoryFragment;
-import com.example.lenovo.memcreator.fragments.FeedsFragment;
-import com.example.lenovo.memcreator.fragments.GalleryFragment;
+import com.example.lenovo.memcreator.models.Memory;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private TabLayout mTabLayout;
-    private ViewPager mViewPager;
-    private int[] tabIconResIds = {R.drawable.ic_memory_white_48dp,
-            R.drawable.ic_note_add_white_48dp,
-            R.drawable.ic_photo_album_white_48dp};
-
+    private MyDatabaseManager manager;
+    private RecyclerView feeds;
+    private FeedsAdapter adapter;
+    private ArrayList<Memory> itemList;
+    private FloatingActionButton createBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,31 +42,32 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        manager = new MyDatabaseManager(this, null, null, 1);
+        feeds = (RecyclerView) findViewById(R.id.rv_feeds);
+
+        itemList = manager.getMemory();
+
+        feeds.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new FeedsAdapter(this, itemList);
+        feeds.setAdapter(adapter);
+
+        createBtn = (FloatingActionButton) findViewById(R.id.btn_go_create_memory);
+        createBtn.setOnClickListener(this);
     }
 
     private void manipulateViews() {
         mDrawerLayout.setDrawerListener(mToggle);
         mToggle.syncState();
 
-        setUpViewPager(mViewPager);
-
-        mTabLayout.setupWithViewPager(mViewPager);
-
-        for (int position = 0; position < mTabLayout.getTabCount(); position++) {
-            mTabLayout.getTabAt(position).setIcon(tabIconResIds[position]);
-        }
-
     }
 
-    private void setUpViewPager(ViewPager viewPager) {
-        HomePagerAdapter adapter = new HomePagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new FeedsFragment());
-        adapter.addFragment(new CreateMemoryFragment());
-        adapter.addFragment(new GalleryFragment());
-        viewPager.setAdapter(adapter);
+    private void update() {
+        itemList = manager.getMemory();
+        adapter.updateList(itemList);
+        adapter.notifyDataSetChanged();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -94,5 +96,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btn_go_create_memory) {
+            startActivity(new Intent(MainActivity.this, CreateMemoryActivity.class));
+        }
     }
 }

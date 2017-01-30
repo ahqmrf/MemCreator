@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,16 +15,15 @@ import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.models.Memory;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Field;
 
-public class ViewMemory extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView memoryName;
+public class ViewMemory extends AppCompatActivity {
+
     private ImageView memoryIcon;
     private TextView memoryDate;
     private TextView memoryTime;
     private TextView memoryText;
-    private Button deleteBtn;
-    private Button editBtn;
     private Memory memory;
 
     private int width = 350;
@@ -38,12 +38,27 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_view_memory);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getOverflowMenu();
 
         initExtras();
         initViews();
-        setUpListeners();
         manipulateViews();
 
+        setTitle(memory.getName());
+
+    }
+
+    private void getOverflowMenu() {
+        try {
+            ViewConfiguration config = ViewConfiguration.get(this);
+            Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+            if(menuKeyField != null) {
+                menuKeyField.setAccessible(true);
+                menuKeyField.setBoolean(config, false);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initExtras() {
@@ -51,30 +66,10 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     }
 
     private void initViews() {
-        memoryName = (TextView) findViewById(R.id.view_memory_name);
         memoryIcon = (ImageView) findViewById(R.id.view_memory_icon);
         memoryDate = (TextView) findViewById(R.id.view_memory_date);
         memoryTime = (TextView) findViewById(R.id.view_memory_time);
         memoryText = (TextView) findViewById(R.id.view_memory_text);
-        deleteBtn = (Button) findViewById(R.id.btn_delete);
-        editBtn = (Button) findViewById(R.id.btn_edit);
-    }
-
-    private void setUpListeners() {
-        deleteBtn.setOnClickListener(this);
-        editBtn.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_delete:
-                promptConfirmation();
-                break;
-            case R.id.btn_edit:
-                editMemory();
-                break;
-        }
     }
 
     private void editMemory() {
@@ -90,7 +85,6 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     }
 
     private void manipulateViews() {
-        memoryName.setText(memory.getName());
         memoryDate.setText("Date: " + memory.getDate());
         memoryText.setText(memory.getText());
         memoryTime.setText("Time: " + memory.getTime());
@@ -143,7 +137,20 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_delete:
+                promptConfirmation();
+                return true;
+            case R.id.menu_edit:
+                editMemory();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.memory_context_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }

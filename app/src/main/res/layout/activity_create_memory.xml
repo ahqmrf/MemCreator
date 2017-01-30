@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:paddingTop="15dp"
-    tools:context="com.example.lenovo.memcreator.fragments.CreateMemoryFragment">
+    tools:context="com.example.lenovo.memcreator.activities.CreateMemoryActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,14 +21,6 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical"
             tools:ignore="UselessParent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:gravity="center"
-                android:text="@string/create_a_new_memory"
-                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -47,6 +39,7 @@
                 android:textColor="#c2000000"
                 android:textCursorDrawable="@null"
                 android:textSize="16sp"
+                android:imeOptions="actionNext"
                 tools:ignore="RtlHardcoded" />
 
             <TextView
