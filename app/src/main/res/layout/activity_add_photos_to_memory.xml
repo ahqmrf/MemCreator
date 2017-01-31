@@ -6,68 +6,84 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     android:orientation="vertical"
-    tools:context="com.example.lenovo.memcreator.activities.AddPhotosToMemoryActivity">
-
-    <TextView
-        android:id="@+id/tv_memory_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="center"
-        android:text="@string/mem_title"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="25sp" />
+    tools:context="com.example.lenovo.memcreator.activities.AddPhotosActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:weightSum="3"
         tools:ignore="DisableBaselineAlignment">
 
-        <Button
-            android:id="@+id/btn_browse"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/browse"
-            android:textAllCaps="false"
-            tools:ignore="ButtonStyle" />
+            android:text="@string/choose_images"/>
 
         <Button
             android:id="@+id/btn_capture"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
             android:text="@string/capture"
             android:textAllCaps="false"
-            tools:ignore="ButtonStyle" />
-
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:textColor="@color/colorPrimary"
+            android:background="#ffffff"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add"
-            android:textAllCaps="false"
-            tools:ignore="ButtonStyle,HardcodedText" />
+            tools:ignore="RtlHardcoded" />
     </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_done"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/done"/>
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="9">
+        <android.support.v7.widget.RecyclerView
+            android:background="#ffffff"
+            android:id="@+id/folder_list"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="8" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/photos_list"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="30dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:weightSum="2">
 
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:background="@color/colorPrimaryDark"
+                android:layout_gravity="right"
+                android:layout_marginRight="5dp"
+                tools:ignore="HardcodedText,RtlHardcoded" />
+
+            <Button
+                android:id="@+id/btn_next"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Next"
+                android:layout_marginLeft="5dp"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:background="@color/colorPrimaryDark"
+                android:layout_gravity="right"
+                tools:ignore="HardcodedText,RtlHardcoded" />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 
 
 </LinearLayout>

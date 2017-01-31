@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="150dp"
+    android:layout_height="150dp"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    android:id="@+id/folder_layout">
+
+    <ImageView
+        android:id="@+id/iv_folder_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/moments"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_folder_name"
+        android:text="FolderName"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:maxLines="1"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom"
+        android:textColor="#ffffff"
+        android:background="#88534c4c"
+        tools:ignore="RtlHardcoded" />
+
+</FrameLayout>

@@ -122,10 +122,10 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         memory.setIcon(pics);
         memory.setText(text);
         manager.addMemory(memory);
-        initInputs();
-        Intent intent = new Intent(this, PromptToAddPhotosActivity.class);
+        Intent intent = new Intent(this, AddPhotosActivity.class);
         intent.putExtra("memory", memory);
         startActivity(intent);
+        initInputs();
     }
 
     private void initInputs() {

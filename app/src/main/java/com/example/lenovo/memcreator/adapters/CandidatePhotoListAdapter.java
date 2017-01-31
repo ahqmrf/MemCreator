@@ -1,7 +1,9 @@
 package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.example.lenovo.memcreator.smartsolver.Jury;
 import com.squareup.picasso.Picasso;
 
@@ -62,7 +65,11 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String photo = itemList.get(position);
-        Picasso.with(context).load("file:" + photo).resize(150, 150).into(holder.candidatePhotoIV);
+        int width= context.getResources().getDisplayMetrics().widthPixels / 3 - 20;
+
+        holder.layout.getLayoutParams().height = width;
+        holder.layout.getLayoutParams().width = width;
+        Picasso.with(context).load("file:" + photo).resize(width, width).into(holder.candidatePhotoIV);
         //holder.candidatePhotoIV.setImageBitmap(Jury.getSuitableBitmap(photo, 150, 150));
     }
 
@@ -82,6 +89,16 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
 
             layout = (FrameLayout) itemView.findViewById(R.id.candidate_photo_layout);
             candidatePhotoIV = (ImageView) itemView.findViewById(R.id.candidate_photo);
+
+            candidatePhotoIV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, FullImageActivity.class);
+                    intent.putExtra("image_path", itemList.get(getAdapterPosition()));
+                    context.startActivity(intent);
+                }
+            });
+
             box = (CheckBox) itemView.findViewById(R.id.btn_select);
 
             box.setOnClickListener(new View.OnClickListener() {

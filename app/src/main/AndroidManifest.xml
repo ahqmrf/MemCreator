@@ -14,8 +14,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.ProfileActivity"
             android:label="Profile" />
@@ -31,8 +30,9 @@
         <activity
             android:name=".activities.EditingMemoryActivity"
             android:label="Edit Memory" />
-        <activity android:name=".activities.AddPhotosToMemoryActivity" />
-        <activity android:name=".activities.PromptToAddPhotosActivity" />
+        <activity
+            android:name=".activities.AddPhotosActivity"
+            android:label="Add photos" />
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,9 +40,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.CreateMemoryActivity"
-            android:label="Create Memory"></activity>
+        <activity
+            android:name=".activities.CreateMemoryActivity"
+            android:label="Create Memory" />
+        <activity android:name=".activities.FullImageActivity" />
+        <activity
+            android:name=".activities.PreviewActivity"
+            android:label="Preview" />
+        <activity android:name=".activities.SelectPhotosActivity" android:label="Select Photos"></activity>
     </application>
 
 </manifest>
