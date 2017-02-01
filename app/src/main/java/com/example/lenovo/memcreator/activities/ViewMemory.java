@@ -1,6 +1,8 @@
 package com.example.lenovo.memcreator.activities;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
@@ -10,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,12 +22,19 @@ import android.widget.ViewFlipper;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ViewMemory extends AppCompatActivity implements View.OnClickListener {
@@ -34,11 +45,22 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     private TextView memoryText;
     private Button toggle;
     private ArrayList<String> photoList;
+    private CircleImageView icon;
+    public ImageLoader imageLoader = ImageLoader.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_memory);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                // .writeDebugLogs() // Remove for release app
+                .build();
+        imageLoader.init(config);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getOverflowMenu();
@@ -73,6 +95,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         memoryText = (TextView) findViewById(R.id.memory_text);
         toggle = (Button) findViewById(R.id.toggle);
         toggle.setOnClickListener(this);
+        icon = (CircleImageView) findViewById(R.id.memory_icon);
     }
 
     private void editMemory() {
@@ -90,6 +113,9 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     private void manipulateViews() {
         memoryText.setText(memory.getText());
         prepareFlipper();
+        String uri = Uri.fromFile(new File(memory.getIcon())).toString();
+        String decoded = Uri.decode(uri);
+        imageLoader.displayImage(decoded, icon);
     }
 
     private void prepareFlipper() {
@@ -99,7 +125,10 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
             ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
             flipImage.setOnClickListener(this);
-            Picasso.with(this).load("file:" + path).into(flipImage);
+            //Picasso.with(this).load("file:" + path).placeholder(R.drawable.loading).into(flipImage);
+            String uri = Uri.fromFile(new File(path)).toString();
+            String decoded = Uri.decode(uri);
+            imageLoader.displayImage(decoded, flipImage);
             flipper.addView(view);
         }
 
@@ -112,6 +141,10 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
 
         flipper.setAutoStart(true);
         flipper.setFlipInterval(5000);
+        Animation fadeIn = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+        Animation fadeOut = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+        flipper.setInAnimation(fadeIn);
+        flipper.setOutAnimation(fadeOut);
         flipper.startFlipping();
     }
 

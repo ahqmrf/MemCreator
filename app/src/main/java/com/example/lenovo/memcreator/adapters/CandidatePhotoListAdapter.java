@@ -2,6 +2,7 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -15,8 +16,13 @@ import android.widget.RelativeLayout;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.example.lenovo.memcreator.smartsolver.Jury;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -30,10 +36,20 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
     private Context context;
     private ArrayList<String> itemList;
     private Set<Integer> selectedIndices = new TreeSet<>();
+    public ImageLoader imageLoader = ImageLoader.getInstance();
 
     public CandidatePhotoListAdapter(Context context, ArrayList<String> itemList) {
         this.context = context;
         this.itemList = itemList;
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                // .writeDebugLogs() // Remove for release app
+                .build();
+        imageLoader.init(config);
     }
 
     public Context getContext() {
@@ -69,7 +85,10 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
 
         holder.layout.getLayoutParams().height = width;
         holder.layout.getLayoutParams().width = width;
-        Picasso.with(context).load("file:" + photo).resize(width, width).into(holder.candidatePhotoIV);
+        String uri = Uri.fromFile(new File(photo)).toString();
+        String decoded = Uri.decode(uri);
+        imageLoader.displayImage(decoded, holder.candidatePhotoIV);
+        //Picasso.with(context).load("file:" + photo).placeholder(R.drawable.loading).resize(width, width).into(holder.candidatePhotoIV);
         //holder.candidatePhotoIV.setImageBitmap(Jury.getSuitableBitmap(photo, 150, 150));
     }
 

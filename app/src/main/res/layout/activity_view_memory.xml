@@ -12,7 +12,8 @@
     <ViewFlipper
         android:id="@+id/flipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
     </ViewFlipper>
 
     <Button
@@ -21,14 +22,17 @@
         android:layout_marginTop="10dp"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_gravity="right|top"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/ic_pause_circle_filled_black_24dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="#64534c4c"
-        android:layout_gravity="bottom">
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="50dp">
         <TextView
             android:id="@+id/memory_text"
             android:textSize="18sp"
@@ -41,5 +45,16 @@
     </ScrollView>
 
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/memory_icon"
+        android:layout_width="60dp"
+        android:maxWidth="60dp"
+        android:layout_height="60dp"
+        android:maxHeight="60dp"
+        android:src="@drawable/no_image"
+        android:layout_gravity="top|right"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription,RtlHardcoded"
+        />
 
 </FrameLayout>

@@ -2,6 +2,7 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,8 +17,13 @@ import com.example.lenovo.memcreator.activities.EditingMemoryActivity;
 import com.example.lenovo.memcreator.activities.PromptDeleteConfirmationActivity;
 import com.example.lenovo.memcreator.activities.ViewMemory;
 import com.example.lenovo.memcreator.models.Memory;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,10 +36,20 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
 
     private Context context;
     private ArrayList<Memory> itemList;
+    public ImageLoader imageLoader = ImageLoader.getInstance();
 
     public FeedsAdapter(Context context, ArrayList<Memory> itemList) {
         this.context = context;
         this.itemList = itemList;
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                // .writeDebugLogs() // Remove for release app
+                .build();
+        imageLoader.init(config);
     }
 
 
@@ -53,7 +69,10 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             Memory memory = itemList.get(position);
 
             if(memory.getIcon() != null) {
-                Picasso.with(context).load("file:" + memory.getIcon()).into(holder.memoryIcon);
+                String uri = Uri.fromFile(new File(memory.getIcon())).toString();
+                String decoded = Uri.decode(uri);
+                //Picasso.with(context).load("file:" + memory.getIcon()).placeholder(R.drawable.loading).into(holder.memoryIcon);
+                imageLoader.displayImage(decoded, holder.memoryIcon);
             } else {
                 holder.memoryIcon.setImageResource(R.drawable.moments);
             }

@@ -21,6 +21,10 @@ import android.widget.Toast;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.io.FileUtils;
@@ -48,12 +52,22 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
     private Button createMemBtn;
     private MyDatabaseManager manager;
     private Memory memory;
+    public ImageLoader imageLoader = ImageLoader.getInstance();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_memory);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                // .writeDebugLogs() // Remove for release app
+                .build();
+        imageLoader.init(config);
 
         selectImageBtn = (Button) findViewById(R.id.btn_add_image);
         selectImageBtn.setOnClickListener(this);
@@ -184,7 +198,10 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
                     try {
                         FileUtils.copyFile(new File(path), imageName);
                         Toast.makeText(this, "A copy of the selected image is saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                        Picasso.with(this).load("file:" + imageName.getAbsolutePath()).into(image);
+                        String uri = Uri.fromFile(imageName).toString();
+                        String decoded = Uri.decode(uri);
+                        //Picasso.with(this).load("file:" + imageName.getAbsolutePath()).placeholder(R.drawable.loading).into(image);
+                        imageLoader.displayImage(decoded, image);
                     }  catch (IOException e) {
                         e.printStackTrace();
                     }

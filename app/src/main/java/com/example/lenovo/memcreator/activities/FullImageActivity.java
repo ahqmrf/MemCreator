@@ -1,27 +1,47 @@
 package com.example.lenovo.memcreator.activities;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.example.lenovo.memcreator.R;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
 
 public class FullImageActivity extends AppCompatActivity {
 
     private ImageView fullImage;
+    public ImageLoader imageLoader = ImageLoader.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_image);
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                // .writeDebugLogs() // Remove for release app
+                .build();
+        imageLoader.init(config);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fullImage = (ImageView) findViewById(R.id.iv_full_image);
         String path = getIntent().getStringExtra("image_path");
-        Picasso.with(this).load("file:" + path).into(fullImage);
+        String uri = Uri.fromFile(new File(path)).toString();
+        String decoded = Uri.decode(uri);
+        imageLoader.displayImage(decoded, fullImage);
+        //Picasso.with(this).load("file:" + path).placeholder(R.drawable.loading).into(fullImage);
     }
 
     @Override

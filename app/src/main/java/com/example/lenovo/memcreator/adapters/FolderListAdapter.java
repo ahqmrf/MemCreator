@@ -2,6 +2,7 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,13 @@ import android.widget.TextView;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.SelectPhotosActivity;
 import com.example.lenovo.memcreator.models.Folder;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -26,6 +32,7 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
 
     private Context context;
     private ArrayList<Folder> folderList;
+    public ImageLoader imageLoader = ImageLoader.getInstance();
 
     public interface Callback {
         public void onFolderClick(String path);
@@ -35,6 +42,15 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
         this.context = context;
         this.folderList = folderList;
         mCallback = callback;
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                // .writeDebugLogs() // Remove for release app
+                .build();
+        imageLoader.init(config);
     }
 
     private Callback mCallback;
@@ -53,8 +69,10 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
         holder.folderLayout.getLayoutParams().height = size;
         Folder folder = folderList.get(position);
         holder.folderName.setText(folder.getFolderName());
-
-        Picasso.with(context).load("file:" + folder.getIconPath()).resize(size, size).into(holder.folderIcon);
+        String uri = Uri.fromFile(new File(folder.getIconPath())).toString();
+        String decoded = Uri.decode(uri);
+        imageLoader.displayImage(decoded, holder.folderIcon);
+        //Picasso.with(context).load("file:" + folder.getIconPath()).placeholder(R.drawable.loading).resize(size, size).into(holder.folderIcon);
     }
 
     @Override
