@@ -77,7 +77,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         try {
             ViewConfiguration config = ViewConfiguration.get(this);
             Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-            if(menuKeyField != null) {
+            if (menuKeyField != null) {
                 menuKeyField.setAccessible(true);
                 menuKeyField.setBoolean(config, false);
             }
@@ -113,9 +113,14 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     private void manipulateViews() {
         memoryText.setText(memory.getText());
         prepareFlipper();
-        String uri = Uri.fromFile(new File(memory.getIcon())).toString();
-        String decoded = Uri.decode(uri);
-        imageLoader.displayImage(decoded, icon);
+        if (memory.getIcon() != null) {
+            String uri = Uri.fromFile(new File(memory.getIcon())).toString();
+            String decoded = Uri.decode(uri);
+            imageLoader.displayImage(decoded, icon);
+        }
+        else {
+            icon.setImageResource(R.drawable.no_image);
+        }
     }
 
     private void prepareFlipper() {
@@ -132,7 +137,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             flipper.addView(view);
         }
 
-        if(photoList.size() == 0) {
+        if (photoList.size() == 0) {
             View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
             ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
             flipImage.setImageResource(R.drawable.no_image);
@@ -184,7 +189,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     }
 
     private void viewFullImage(int displayedChild) {
-        if(flipper.isFlipping()) {
+        if (flipper.isFlipping()) {
             flipper.stopFlipping();
             toggle.setBackgroundResource(R.drawable.ic_play_circle_filled_black_24dp);
         }
@@ -194,11 +199,10 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     }
 
     private void toggleFlipping() {
-        if(flipper.isFlipping()) {
+        if (flipper.isFlipping()) {
             flipper.stopFlipping();
             toggle.setBackgroundResource(R.drawable.ic_play_circle_filled_black_24dp);
-        }
-        else {
+        } else {
             flipper.startFlipping();
             toggle.setBackgroundResource(R.drawable.ic_pause_circle_filled_black_24dp);
         }
