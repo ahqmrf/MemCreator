@@ -119,7 +119,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             imageLoader.displayImage(decoded, icon);
         }
         else {
-            icon.setImageResource(R.drawable.no_image);
+            icon.setImageResource(R.drawable.moments);
         }
     }
 
