@@ -33,6 +33,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
     private ViewFlipper flipper;
     private TextView memoryText;
     private Button toggle;
+    private ArrayList<String> photoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +94,11 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
 
     private void prepareFlipper() {
         flipper.removeAllViews();
-        ArrayList<String> photoList = manager.getMemoryPhotos(memory);
+        photoList = manager.getMemoryPhotos(memory);
         for (String path : photoList) {
             View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
             ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
+            flipImage.setOnClickListener(this);
             Picasso.with(this).load("file:" + path).into(flipImage);
             flipper.addView(view);
         }
@@ -142,7 +144,20 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             case R.id.toggle:
                 toggleFlipping();
                 break;
+            case R.id.photo_item:
+                viewFullImage(flipper.getDisplayedChild());
+                break;
         }
+    }
+
+    private void viewFullImage(int displayedChild) {
+        if(flipper.isFlipping()) {
+            flipper.stopFlipping();
+            toggle.setBackgroundResource(R.drawable.ic_play_circle_filled_black_24dp);
+        }
+        Intent intent = new Intent(this, FullImageActivity.class);
+        intent.putExtra("image_path", photoList.get(displayedChild));
+        startActivity(intent);
     }
 
     private void toggleFlipping() {
