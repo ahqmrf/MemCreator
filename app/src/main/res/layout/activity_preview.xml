@@ -5,38 +5,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginBottom="5dp"
+    android:layout_margin="5dp"
+    android:weightSum="9"
     tools:context="com.example.lenovo.memcreator.activities.PreviewActivity">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Selected photos:" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pic_list"
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="5dp"
         android:layout_weight="8" />
 
-    <Button
-        android:id="@+id/btn_done"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Done"
-        android:textAllCaps="false"
-        android:textColor="#ffffff"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="center"
-        tools:ignore="HardcodedText,RtlHardcoded" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="9">
+        android:weightSum="2"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/btn_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Back"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            android:layout_marginRight="3dp"
+            tools:ignore="HardcodedText,RtlHardcoded" />
+
+        <Button
+            android:id="@+id/btn_done"
+            android:layout_marginLeft="3dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="#ffffff"
+            android:background="@color/colorPrimaryDark"
+            android:gravity="center"
+            tools:ignore="HardcodedText,RtlHardcoded" />
     </LinearLayout>
 
 

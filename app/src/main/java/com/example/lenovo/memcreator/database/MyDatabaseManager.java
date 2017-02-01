@@ -151,7 +151,7 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
         return memories;
     }
 
-    private ArrayList<String> getMemoryPhotos(String time) {
+    public ArrayList<String> getMemoryPhotos(String time) {
         ArrayList<String> photos = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
 
@@ -168,5 +168,9 @@ public class MyDatabaseManager extends SQLiteOpenHelper {
         }
 
         return photos;
+    }
+    public ArrayList<String> getMemoryPhotos(Memory memory) {
+        String time = memory.getTime();
+        return getMemoryPhotos(time);
     }
 }

@@ -4,33 +4,35 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.example.lenovo.memcreator.R;
+import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 
-public class ViewMemory extends AppCompatActivity {
+public class ViewMemory extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView memoryIcon;
-    private TextView memoryDate;
-    private TextView memoryTime;
-    private TextView memoryText;
     private Memory memory;
-
-    private int width = 350;
-    private int height = 350;
-    private int preferredWidth = 350;
-    private int preferredHeight = 350;
-
+    private MyDatabaseManager manager;
+    private ViewFlipper flipper;
+    private TextView memoryText;
+    private Button toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +41,7 @@ public class ViewMemory extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getOverflowMenu();
-
+        manager = new MyDatabaseManager(this, null, null, 1);
         initExtras();
         initViews();
         manipulateViews();
@@ -66,10 +68,10 @@ public class ViewMemory extends AppCompatActivity {
     }
 
     private void initViews() {
-        memoryIcon = (ImageView) findViewById(R.id.view_memory_icon);
-        memoryDate = (TextView) findViewById(R.id.view_memory_date);
-        memoryTime = (TextView) findViewById(R.id.view_memory_time);
-        memoryText = (TextView) findViewById(R.id.view_memory_text);
+        flipper = (ViewFlipper) findViewById(R.id.flipper);
+        memoryText = (TextView) findViewById(R.id.memory_text);
+        toggle = (Button) findViewById(R.id.toggle);
+        toggle.setOnClickListener(this);
     }
 
     private void editMemory() {
@@ -85,50 +87,30 @@ public class ViewMemory extends AppCompatActivity {
     }
 
     private void manipulateViews() {
-        memoryDate.setText("Date: " + memory.getDate());
         memoryText.setText(memory.getText());
-        memoryTime.setText("Time: " + memory.getTime());
-
-        measureSizeForImageView();
-        setMemoryIcon();
-        setMemoryPhotos();
+        prepareFlipper();
     }
 
-    private void measureSizeForImageView() {
-        Display display = getWindowManager().getDefaultDisplay();
-
-        height = memoryIcon.getDrawable().getIntrinsicHeight();
-        width = memoryIcon.getDrawable().getIntrinsicWidth();
-
-        int screenWidth = display.getWidth();
-        int screenHeight = display.getWidth();
-
-        if(width >= height) {
-            float ratio = 1f * screenWidth / width;
-            screenHeight = (int)(1f * height * ratio);
-        }
-        else {
-            float ratio = 1f * screenHeight / height;
-            screenWidth = (int)(1f * width * ratio);
+    private void prepareFlipper() {
+        flipper.removeAllViews();
+        ArrayList<String> photoList = manager.getMemoryPhotos(memory);
+        for (String path : photoList) {
+            View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
+            ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
+            Picasso.with(this).load("file:" + path).into(flipImage);
+            flipper.addView(view);
         }
 
-        preferredHeight = screenHeight;
-        preferredWidth = screenWidth;
-    }
-
-    private void setMemoryIcon() {
-        if(memory.getIcon() != null) {
-            Picasso.with(this).load("file:" + memory.getIcon()).into(memoryIcon);
-        } else {
-            memoryIcon.setImageResource(R.drawable.moments);
+        if(photoList.size() == 0) {
+            View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
+            ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
+            flipImage.setImageResource(R.drawable.no_image);
+            flipper.addView(view);
         }
 
-        memoryIcon.getLayoutParams().height = preferredHeight;
-        memoryIcon.getLayoutParams().width = preferredWidth;
-    }
-
-    private void setMemoryPhotos() {
-        // TO DO
+        flipper.setAutoStart(true);
+        flipper.setFlipInterval(5000);
+        flipper.startFlipping();
     }
 
     @Override
@@ -152,5 +134,25 @@ public class ViewMemory extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.memory_context_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.toggle:
+                toggleFlipping();
+                break;
+        }
+    }
+
+    private void toggleFlipping() {
+        if(flipper.isFlipping()) {
+            flipper.stopFlipping();
+            toggle.setBackgroundResource(R.drawable.ic_play_circle_filled_black_24dp);
+        }
+        else {
+            flipper.startFlipping();
+            toggle.setBackgroundResource(R.drawable.ic_pause_circle_filled_black_24dp);
+        }
     }
 }

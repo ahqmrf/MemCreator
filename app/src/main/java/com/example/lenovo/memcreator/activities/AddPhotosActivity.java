@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.adapters.CandidatePhotoListAdapter;
 import com.example.lenovo.memcreator.adapters.FolderListAdapter;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Folder;
@@ -42,7 +41,9 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
     private Button nextBtn;
     private Button cancelBtn;
     private ArrayList<String> listOfSelectedImages;
+    private TreeSet<String> setOfSelectedImages;
     private final int SELECTED_PHOTO_REQUEST_CODE = 45;
+    private Memory memory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +51,7 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_add_photos_to_memory);
 
 
-        Memory memory = getIntent().getParcelableExtra("memory");
+        memory = getIntent().getParcelableExtra("memory");
         manager = new MyDatabaseManager(this, null, null, 1);
 
         captureBtn = (Button) findViewById(R.id.btn_capture);
@@ -61,6 +62,7 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         cancelBtn.setOnClickListener(this);
 
         listOfSelectedImages = new ArrayList<>();
+        setOfSelectedImages = new TreeSet<>();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -134,7 +136,15 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void goNext() {
+        listOfSelectedImages.clear();
+        for(String key : setOfSelectedImages) {
+            listOfSelectedImages.add(key);
+        }
 
+        Intent intent = new Intent(this, PreviewActivity.class);
+        intent.putExtra("memory", memory);
+        intent.putStringArrayListExtra("photos", listOfSelectedImages);
+        startActivity(intent);
     }
 
     private void openCamera() {
@@ -168,24 +178,22 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            // TO DO
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Captured image saved to " + capturedImagePath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                listOfSelectedImages.add(capturedImagePath.getAbsolutePath());
+                setOfSelectedImages.add(capturedImagePath.getAbsolutePath());
             }
-            else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the image capture
+            else if (resultCode == RESULT_CANCELED)
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                // Image capture failed, advise user
+            else
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-            }
         }
 
         else if(requestCode == SELECTED_PHOTO_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 ArrayList<String> list = data.getStringArrayListExtra("list");
+                for(String s : list) {
+                    setOfSelectedImages.add(s);
+                }
                 Toast.makeText(this, "selected " + list.size() + " photos", Toast.LENGTH_SHORT).show();
             }
         }

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
             android:text="@string/mem_title"
-            android:maxLength="30"
+            android:maxLines="1"
             android:textSize="17sp"/>
 
         <TextView
