@@ -20,7 +20,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
     private RecyclerView previewPhotoList;
     private PreviewPhotoListAdapter adapter;
-    private ArrayList<String> pathList = new ArrayList<>();
+    private ArrayList<String> pathList;
     private Memory memory;
     private Button doneBtn;
     private Button backBtn;
@@ -34,12 +34,13 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         previewPhotoList = (RecyclerView) findViewById(R.id.pic_list);
         previewPhotoList.setLayoutManager(new GridLayoutManager(this, 3));
+        Intent extras = getIntent();
 
-        pathList = getIntent().getStringArrayListExtra("photos");
+        pathList = extras.getExtras().getStringArrayList("photos");
         adapter = new PreviewPhotoListAdapter(this, pathList);
         previewPhotoList.setAdapter(adapter);
 
-        memory = getIntent().getParcelableExtra("memory");
+        memory = extras.getParcelableExtra("memory");
 
         doneBtn = (Button) findViewById(R.id.btn_done);
         doneBtn.setOnClickListener(this);

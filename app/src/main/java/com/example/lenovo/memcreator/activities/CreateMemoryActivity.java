@@ -1,8 +1,10 @@
 package com.example.lenovo.memcreator.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,18 +43,20 @@ import static android.content.ContentValues.TAG;
  * Created by Lenovo on 1/30/2017.
  */
 
-public class CreateMemoryActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener{
+public class CreateMemoryActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener {
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int BROWSE_GALLERY_REQUEST_CODE = 100;
     private Button selectImageBtn;
     private EditText memoryText, memoryName;
-    private ImageView image;
+    private ImageView avatarImageView;
     private Button captureBtn;
     private File imageName;
     private Button createMemBtn;
     private MyDatabaseManager manager;
-    private Memory memory;
+    private Memory memory = new Memory();
+    ;
+    private String avatarIconPath;
     public ImageLoader imageLoader = ImageLoader.getInstance();
 
 
@@ -73,7 +78,7 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         selectImageBtn.setOnClickListener(this);
 
 
-        image = (ImageView) findViewById(R.id.image);
+        avatarImageView = (ImageView) findViewById(R.id.image);
         memoryText = (EditText) findViewById(R.id.memory_text);
         memoryText.setOnFocusChangeListener(this);
         memoryName = (EditText) findViewById(R.id.memory_name);
@@ -92,11 +97,11 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_add_image :
+            case R.id.btn_add_image:
                 openImageGallery();
                 break;
-            case R.id.btn_capture_image :
-                openCamera();
+            case R.id.btn_capture_image:
+                takePicture();
                 break;
             case R.id.btn_create_memory:
                 saveMemory();
@@ -108,126 +113,75 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         String text = memoryText.getText().toString();
         String memName = memoryName.getText().toString();
 
-        if(memName == null | memName.equals("") | memName.length() == 0) {
+        if (memName == null | memName.equals("") | memName.length() == 0) {
             Toast.makeText(this, "Memory name cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if(text == null | text.equals("") | text.length() == 0) {
+        if (text == null | text.equals("") | text.length() == 0) {
             Toast.makeText(this, "Write something about this memory!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        System.out.println(memName);
-
-        String pics = null;
-        if(imageName != null) pics = imageName.getAbsolutePath();
-        else {
-            Toast.makeText(this, "You did not select/capture any image.", Toast.LENGTH_SHORT).show();
-        }
-
         java.util.Date date = new java.util.Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        memory = new Memory();
         memory.setName(memName);
         memory.setDate(sdf.format(date).toString());
         sdf = new SimpleDateFormat("HH:mm:ss");
         memory.setTime(sdf.format(date).toString());
-        memory.setIcon(pics);
         memory.setText(text);
         manager.addMemory(memory);
         Intent intent = new Intent(this, AddPhotosActivity.class);
         intent.putExtra("memory", memory);
         startActivity(intent);
-        initInputs();
+        finish();
     }
 
-    private void initInputs() {
-        memoryName.setText("");
-        memoryText.setText("");
-        image.setImageResource(R.drawable.no_image);
-    }
-
-    private void openCamera() {
-        Intent imageIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MemCreator");
-        if(!imagesFolder.exists()) imagesFolder.mkdirs();
-
-        imageName = new File(imagesFolder, "MemCreator_" + timeStamp + ".png");
-        Uri uriSavedImage = Uri.fromFile(imageName);
-
-        if(uriSavedImage != null) {
-
-            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
-            startActivityForResult(imageIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-            System.out.println(imageName.getAbsolutePath());
-            image.setImageBitmap(BitmapFactory.decodeFile(imageName.getAbsolutePath()));
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
     private void openImageGallery() {
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), BROWSE_GALLERY_REQUEST_CODE);
-
+        intent.setAction(Intent.ACTION_PICK);
+        if (getPackageManager().resolveActivity(intent, 0) != null) {
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), BROWSE_GALLERY_REQUEST_CODE);
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == BROWSE_GALLERY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // Get the url from data
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
-                    // Get the path from the Uri
-                    String path = getPathFromURI(selectedImageUri);
-                    Log.i(TAG, "Image Path : " + path);
-                    // Set the image in ImageView
-                    String [] tokens = path.split("/");
-                    String imageNameOriginal = tokens[tokens.length - 1];
-                    String text = "Selected: " + imageNameOriginal;
+                    String path = getRealPathFromURI(selectedImageUri);
+                    String text = "Selected: " + path;
                     Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-
-                    File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MemCreator");
-                    if(!imagesFolder.exists()) imagesFolder.mkdirs();
-                    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-                    imageName = new File(imagesFolder, "MemCreator_" + timeStamp + "_" + imageNameOriginal);
-
-                    try {
-                        FileUtils.copyFile(new File(path), imageName);
-                        Toast.makeText(this, "A copy of the selected image is saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                        String uri = Uri.fromFile(imageName).toString();
-                        String decoded = Uri.decode(uri);
-                        //Picasso.with(this).load("file:" + imageName.getAbsolutePath()).placeholder(R.drawable.loading).into(image);
-                        imageLoader.displayImage(decoded, image);
-                    }  catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
+                    avatarImageView.setImageBitmap(BitmapFactory.decodeFile(path));
+                    memory.setIcon(path);
                 }
             }
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap photo = (Bitmap) extras.get("data");
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+            
+            avatarIconPath = getRealPathFromURI(tempUri);
+            if (avatarIconPath != null) {
+                avatarImageView.setImageBitmap(BitmapFactory.decodeFile(avatarIconPath));
+                memory.setIcon(avatarIconPath);
+            }
+
         }
-        else if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            // TO DO
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Captured image saved to " + imageName.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                image.setImageBitmap(BitmapFactory.decodeFile(imageName.getAbsolutePath()));
-            }
-            else if (resultCode == RESULT_CANCELED) {
-                // User cancelled the image capture
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                // Image capture failed, advise user
-                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
-            }
-        }
+
     }
 
     /* Get the real path from the URI */
-    public String getPathFromURI(Uri contentUri) {
+    public String getPathFromURI(Uri contentUri) throws IllegalArgumentException {
         String res = null;
         String[] proj = {MediaStore.Images.Media.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
@@ -239,10 +193,24 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         return res;
     }
 
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        if(v.getId() == R.id.memory_text || v.getId() == R.id.memory_name) {
+        if (v.getId() == R.id.memory_text || v.getId() == R.id.memory_name) {
             if (!hasFocus) {
                 hideKeyboard(v);
             }
@@ -250,7 +218,7 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
