@@ -11,6 +11,7 @@ import android.widget.Button;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.adapters.CandidatePhotoListAdapter;
+import com.example.lenovo.memcreator.models.Folder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,7 +36,15 @@ public class SelectPhotosActivity extends AppCompatActivity {
         File file = new File(folder);
         File fileList[] = file.listFiles();
         for (File pic : fileList) {
-            paths.add(pic.getAbsolutePath());
+            String path = pic.getAbsolutePath();
+            if(path.endsWith(".jpeg") || path.endsWith(".JPEG")
+                    || path.endsWith(".png") || path.endsWith(".PNG")
+                    || path.endsWith(".bmp") || path.endsWith(".BMP")
+                    || path.endsWith(".jpg") || path.endsWith(".JPG")
+                    || path.endsWith(".gif") || path.endsWith(".GIF")) {
+                paths.add(path);
+            }
+
         }
 
         adapter = new CandidatePhotoListAdapter(this, paths);
