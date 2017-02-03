@@ -80,11 +80,15 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
 
         holder.layout.getLayoutParams().height = width;
         holder.layout.getLayoutParams().width = width;
-        String uri = Uri.fromFile(new File(photo)).toString();
-        String decoded = Uri.decode(uri);
-        imageLoader.displayImage(decoded, holder.candidatePhotoIV);
-        //Picasso.with(context).load("file:" + photo).placeholder(R.drawable.loading).resize(width, width).into(holder.candidatePhotoIV);
-        //holder.candidatePhotoIV.setImageBitmap(Jury.getSuitableBitmap(photo, 150, 150));
+        File file = new File(photo);
+        if(file.exists()) {
+            String uri = Uri.fromFile(file).toString();
+            String decoded = Uri.decode(uri);
+            imageLoader.displayImage(decoded, holder.candidatePhotoIV);
+        }
+        else {
+            holder.candidatePhotoIV.setImageResource(R.drawable.loading);
+        }
     }
 
     @Override

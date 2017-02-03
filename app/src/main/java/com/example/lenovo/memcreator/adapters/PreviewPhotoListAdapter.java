@@ -57,10 +57,15 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
 
         holder.layout.getLayoutParams().height = width;
         holder.layout.getLayoutParams().width = width;
-        String uri = Uri.fromFile(new File(photo)).toString();
-        String decoded = Uri.decode(uri);
-        imageLoader.displayImage(decoded, holder.previewPhotoIV);
-        //Picasso.with(context).load("file:" + photo).placeholder(R.drawable.loading).resize(width, width).into(holder.previewPhotoIV);
+        File file = new File(photo);
+        if(file.exists()) {
+            String uri = Uri.fromFile(file).toString();
+            String decoded = Uri.decode(uri);
+            imageLoader.displayImage(decoded, holder.previewPhotoIV);
+        }
+        else {
+            holder.previewPhotoIV.setImageResource(R.drawable.loading);
+        }
     }
 
     @Override

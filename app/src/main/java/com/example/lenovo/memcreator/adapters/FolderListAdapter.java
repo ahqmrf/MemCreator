@@ -33,7 +33,7 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
     public ImageLoader imageLoader = ImageLoader.getInstance();
 
     public interface Callback {
-        public void onFolderClick(String path);
+        void onFolderClick(String path);
     }
 
     public FolderListAdapter(Context context, ArrayList<Folder> folderList, Callback callback) {
@@ -67,10 +67,15 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
         holder.folderLayout.getLayoutParams().height = size;
         Folder folder = folderList.get(position);
         holder.folderName.setText(folder.getFolderName());
-        String uri = Uri.fromFile(new File(folder.getIconPath())).toString();
-        String decoded = Uri.decode(uri);
-        imageLoader.displayImage(decoded, holder.folderIcon);
-        //Picasso.with(context).load("file:" + folder.getIconPath()).placeholder(R.drawable.loading).resize(size, size).into(holder.folderIcon);
+        File file = new File(folder.getIconPath());
+        if(file.exists()) {
+            String uri = Uri.fromFile(file).toString();
+            String decoded = Uri.decode(uri);
+            imageLoader.displayImage(decoded, holder.folderIcon);
+        }
+        else {
+            holder.folderIcon.setImageResource(R.drawable.loading);
+        }
     }
 
     @Override
@@ -100,12 +105,6 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
                     mCallback.onFolderClick(folderList.get(getAdapterPosition()).getFolderPath());
                     break;
             }
-        }
-
-        private void showFolderImages(String folderDirectory) {
-            Intent intent = new Intent(context, SelectPhotosActivity.class);
-            intent.putExtra("folder", folderDirectory);
-            context.startActivity(intent);
         }
     }
 }

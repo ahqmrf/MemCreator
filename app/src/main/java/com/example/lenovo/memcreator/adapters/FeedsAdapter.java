@@ -68,10 +68,16 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             Memory memory = itemList.get(position);
 
             if(memory.getIcon() != null) {
-                String uri = Uri.fromFile(new File(memory.getIcon())).toString();
-                String decoded = Uri.decode(uri);
-                //Picasso.with(context).load("file:" + memory.getIcon()).placeholder(R.drawable.loading).into(holder.memoryIcon);
-                imageLoader.displayImage(decoded, holder.memoryIcon);
+                File file = new File(memory.getIcon());
+                if(file.exists()) {
+                    String uri = Uri.fromFile(file).toString();
+                    String decoded = Uri.decode(uri);
+                    //Picasso.with(context).load("file:" + memory.getIcon()).placeholder(R.drawable.loading).into(holder.memoryIcon);
+                    imageLoader.displayImage(decoded, holder.memoryIcon);
+                }
+                else {
+                    holder.memoryIcon.setImageResource(R.drawable.loading);
+                }
             } else {
                 holder.memoryIcon.setImageResource(R.drawable.moments);
             }

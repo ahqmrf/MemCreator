@@ -95,7 +95,6 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
                             || path.endsWith(".jpg") || path.endsWith(".JPG")
                             || path.endsWith(".gif") || path.endsWith(".GIF")) {
                         folderList.add(new Folder(key, path));
-                        System.out.println(path);
                         break;
                     }
                 }
@@ -204,7 +203,6 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
                         || path.endsWith(".gif") || path.endsWith(".GIF")) {
                     folderSet.add(parent);
                 }
-                return;
             }
         }
     }

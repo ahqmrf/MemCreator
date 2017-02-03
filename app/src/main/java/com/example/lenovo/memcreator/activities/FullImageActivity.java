@@ -37,9 +37,15 @@ public class FullImageActivity extends AppCompatActivity {
 
         fullImage = (ImageView) findViewById(R.id.iv_full_image);
         String path = getIntent().getStringExtra("image_path");
-        String uri = Uri.fromFile(new File(path)).toString();
-        String decoded = Uri.decode(uri);
-        imageLoader.displayImage(decoded, fullImage);
+        File file = new File(path);
+        if(file.exists()) {
+            String uri = Uri.fromFile(file).toString();
+            String decoded = Uri.decode(uri);
+            imageLoader.displayImage(decoded, fullImage);
+        }
+        else {
+            fullImage.setImageResource(R.drawable.loading);
+        }
     }
 
     @Override

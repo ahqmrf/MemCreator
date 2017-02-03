@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
                 .build();
         imageLoader.init(config);
 
-        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getOverflowMenu();
         manager = new MyDatabaseManager(this, null, null, 1);
         initExtras();
@@ -111,8 +112,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             String uri = Uri.fromFile(new File(memory.getIcon())).toString();
             String decoded = Uri.decode(uri);
             imageLoader.displayImage(decoded, icon);
-        }
-        else {
+        } else {
             icon.setImageResource(R.drawable.moments);
         }
     }
@@ -124,9 +124,15 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
             ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
             flipImage.setOnClickListener(this);
-            String uri = Uri.fromFile(new File(path)).toString();
-            String decoded = Uri.decode(uri);
-            imageLoader.displayImage(decoded, flipImage);
+            File file = new File(path);
+            if (file.exists()) {
+                String uri = Uri.fromFile(file).toString();
+                String decoded = Uri.decode(uri);
+                imageLoader.displayImage(decoded, flipImage);
+            }
+            else {
+                flipImage.setImageResource(R.drawable.loading);
+            }
             flipper.addView(view);
         }
 
