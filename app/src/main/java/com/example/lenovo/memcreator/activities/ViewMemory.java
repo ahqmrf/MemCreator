@@ -109,9 +109,15 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
         memoryText.setText(memory.getText());
         prepareFlipper();
         if (memory.getIcon() != null) {
-            String uri = Uri.fromFile(new File(memory.getIcon())).toString();
-            String decoded = Uri.decode(uri);
-            imageLoader.displayImage(decoded, icon);
+            File file = new File(memory.getIcon());
+            if(file.exists()) {
+                String uri = Uri.fromFile(file).toString();
+                String decoded = Uri.decode(uri);
+                imageLoader.displayImage(decoded, icon);
+            }
+            else {
+                icon.setImageResource(R.drawable.loading);
+            }
         } else {
             icon.setImageResource(R.drawable.moments);
         }
