@@ -22,7 +22,7 @@
             android:layout_gravity="top|right"
             android:layout_marginRight="-5dp"
             android:layout_marginTop="-5dp"
-            app:buttonTint="#ffffff"
-            tools:ignore="RtlHardcoded" />
+            tools:ignore="RtlHardcoded"
+            android:theme="@style/MyCheckBox"/>
 
 </FrameLayout>

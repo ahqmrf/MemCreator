@@ -13,9 +13,8 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="WhatsAppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/green</item>
-        <item name="colorPrimaryDark">@color/darkGreen</item>
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/blueGrayDark</item>
     </style>
 
 </resources>

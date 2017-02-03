@@ -48,7 +48,7 @@
         <activity
             android:name=".activities.PreviewActivity"
             android:label="Preview" />
-        <activity android:name=".activities.SelectPhotosActivity" android:label="Select Photos"></activity>
+        <activity android:name=".activities.SelectPhotosActivity" android:label="Select Photos"/>
     </application>
 
 </manifest>

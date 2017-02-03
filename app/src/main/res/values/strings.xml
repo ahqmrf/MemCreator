@@ -18,4 +18,5 @@
     <string name="add_icon">Add an avatar to your memory (optional)</string>
     <string name="done">Done</string>
     <string name="choose_images">Choose folders or</string>
+    <string name="edit_memory">Edit memory</string>
 </resources>
