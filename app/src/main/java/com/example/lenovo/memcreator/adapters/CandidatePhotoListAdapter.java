@@ -15,12 +15,10 @@ import android.widget.RelativeLayout;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
-import com.example.lenovo.memcreator.smartsolver.Jury;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;

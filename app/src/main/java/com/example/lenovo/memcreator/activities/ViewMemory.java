@@ -26,10 +26,6 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
