@@ -23,6 +23,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -86,12 +87,28 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
             holder.memoryDescription.setText(memory.getText());
 
             StringBuilder builder = new StringBuilder();
-            String tokens[] = memory.getDate().split("-");
-            builder.append(tokens[2] + "/");
-            builder.append(tokens[1] + "/");
-            builder.append(tokens[0].charAt(2) + "" + tokens[0].charAt(3));
+            java.util.Date date = new java.util.Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(date).toString();
+            int hour = Integer.parseInt(memory.getTime().substring(0, 2));
+            String amOrpm = "AM";
 
-            holder.memoryDate.setText(builder.toString());
+            if(hour > 12) {
+                hour -= 12;
+                amOrpm = "PM";
+            }
+            String time = hour + memory.getTime().substring(2, 5) + " " + amOrpm;
+            if(today.equals(memory.getDate())) {
+                holder.memoryDate.setText("Today\n" + time);
+            }
+            else {
+                String tokens[] = memory.getDate().split("-");
+                builder.append(tokens[2] + "/");
+                builder.append(tokens[1] + "/");
+                builder.append(tokens[0].charAt(2) + "" + tokens[0].charAt(3) + "\n" + time);
+
+                holder.memoryDate.setText(builder.toString());
+            }
         }
     }
 
