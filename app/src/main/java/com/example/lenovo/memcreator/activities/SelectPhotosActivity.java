@@ -11,7 +11,6 @@ import android.widget.Button;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.adapters.CandidatePhotoListAdapter;
-import com.example.lenovo.memcreator.models.Folder;
 
 import java.io.File;
 import java.util.ArrayList;

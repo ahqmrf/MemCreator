@@ -1,11 +1,9 @@
 package com.example.lenovo.memcreator.activities;
 
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;

@@ -27,7 +27,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 
 /**

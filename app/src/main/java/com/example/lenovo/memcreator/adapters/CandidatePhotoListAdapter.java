@@ -4,15 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
