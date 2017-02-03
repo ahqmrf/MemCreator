@@ -20,6 +20,7 @@ public class Memory implements Parcelable{
         date = in.readString();
         text = in.readString();
         icon = in.readString();
+        in.readStringList(photos);
     }
 
     public static final Creator<Memory> CREATOR = new Creator<Memory>() {

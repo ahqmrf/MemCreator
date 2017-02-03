@@ -34,13 +34,13 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         previewPhotoList = (RecyclerView) findViewById(R.id.pic_list);
         previewPhotoList.setLayoutManager(new GridLayoutManager(this, 3));
-        Intent extras = getIntent();
+        Bundle extras = getIntent().getExtras();
 
-        pathList = extras.getExtras().getStringArrayList("photos");
+        memory = extras.getParcelable("memory");
+        pathList = extras.getStringArrayList("photos");
+
         adapter = new PreviewPhotoListAdapter(this, pathList);
         previewPhotoList.setAdapter(adapter);
-
-        memory = extras.getParcelableExtra("memory");
 
         doneBtn = (Button) findViewById(R.id.btn_done);
         doneBtn.setOnClickListener(this);

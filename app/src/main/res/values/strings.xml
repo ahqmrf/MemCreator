@@ -5,34 +5,17 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="post_mem">Write your memory</string>
     <string name="browse">Browse</string>
     <string name="create_memory">Create Memory</string>
-    <string name="create_a_new_memory"><b>Create a new memory</b></string>
     <string name="capture">Capture</string>
     <string name="write_something">Write something about this memory:</string>
     <string name="memory_name">Name:</string>
     <string name="mem_title">Memory Title will be here, maximum 30 lines</string>
     <string name="mem_text">Memory description\nalot things</string>
-    <string name="refresh">Refresh</string>
-    <string name="mem_date">mem_date</string>
-    <string name="mem_time">mem_time</string>
-    <string name="view_memory_name"><b>Memory Name</b></string>
-    <string name="memory_date">Memory Date</string>
-    <string name="memory_time">Memory Time</string>
-    <string name="memory_text">Memory Text</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
-    <string name="edit_mem">Edit</string>
-    <string name="this_is_settings">This is settings</string>
     <string name="are_you_sure_you_want_to_delete_this_memory">Are you sure you want to delete this memory?</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
-    <string name="hint_memory_name"><i>Memory name</i></string>
     <string name="add_icon">Add an avatar to your memory (optional)</string>
-    <string name="do_you_want_to_add_photos_to_this_memory">Do you want to add photos to this memory?</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
     <string name="done">Done</string>
     <string name="choose_images">Choose folders or</string>
 </resources>

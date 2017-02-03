@@ -71,16 +71,9 @@ public class SelectPhotosActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        sendResultBack();
-        finish();
-    }
 
     private ArrayList<String> getList() {
-        TreeSet<Integer> set = new TreeSet<>();
-        set = adapter.getSelectedIndices();
+        TreeSet<Integer> set = adapter.getSelectedIndices();
         ArrayList<String> list = new ArrayList<>();
         for (int i : set) {
             list.add(paths.get(i));

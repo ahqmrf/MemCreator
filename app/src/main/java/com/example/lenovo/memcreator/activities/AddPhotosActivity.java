@@ -1,7 +1,9 @@
 package com.example.lenovo.memcreator.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -21,6 +23,8 @@ import com.example.lenovo.memcreator.models.Folder;
 import com.example.lenovo.memcreator.models.Memory;
 
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +35,7 @@ import java.util.TreeSet;
 public class AddPhotosActivity extends AppCompatActivity implements View.OnClickListener, FolderListAdapter.Callback {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 101;
+    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private MyDatabaseManager manager;
     private TreeSet<String> folderSet;
     private FolderListAdapter adapter;
@@ -124,7 +129,7 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_capture:
-                openCamera();
+                takePicture();
                 break;
             case R.id.btn_next:
                 goNext();
@@ -142,50 +147,34 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         }
 
         Intent intent = new Intent(this, PreviewActivity.class);
-        intent.putExtra("memory", memory);
-        intent.putStringArrayListExtra("photos", listOfSelectedImages);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("memory", memory);
+        bundle.putStringArrayList("photos", listOfSelectedImages);
+        /*intent.putExtra("memory", memory);
+        intent.putStringArrayListExtra("photos", listOfSelectedImages);*/
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
-    private void openCamera() {
-        Intent imageIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-        File imagesFolder = new File(Environment.getExternalStorageDirectory(), "MemCreator");
-        if(!imagesFolder.exists()) imagesFolder.mkdirs();
-
-        capturedImagePath = new File(imagesFolder, "MemCreator_" + timeStamp + ".png");
-        Uri uriSavedImage = Uri.fromFile(capturedImagePath);
-
-        if(uriSavedImage != null) {
-
-            imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
-            startActivityForResult(imageIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+    private void takePicture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
-    public String getPathFromURI(Uri contentUri) {
-        String res = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
-        }
-        cursor.close();
-        return res;
-    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Captured image saved to " + capturedImagePath.getAbsolutePath(), Toast.LENGTH_SHORT).show();
-                setOfSelectedImages.add(capturedImagePath.getAbsolutePath());
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap photo = (Bitmap) extras.get("data");
+            Uri tempUri = getImageUri(getApplicationContext(), photo);
+
+            String imagePath = getRealPathFromURI(tempUri);
+            if (imagePath != null) {
+                setOfSelectedImages.add(imagePath);
             }
-            else if (resultCode == RESULT_CANCELED)
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show();
-            else
-                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+
         }
 
         else if(requestCode == SELECTED_PHOTO_REQUEST_CODE) {
@@ -231,5 +220,19 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         Intent intent = new Intent(this, SelectPhotosActivity.class);
         intent.putExtra("folder", path);
         startActivityForResult(intent, SELECTED_PHOTO_REQUEST_CODE);
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
     }
 }
