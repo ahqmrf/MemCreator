@@ -26,22 +26,18 @@ import com.example.lenovo.memcreator.models.Memory;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.TreeSet;
 
 
 public class AddPhotosActivity extends AppCompatActivity implements View.OnClickListener, FolderListAdapter.Callback {
 
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 101;
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private MyDatabaseManager manager;
     private TreeSet<String> folderSet;
     private FolderListAdapter adapter;
     private RecyclerView folderListView;
     private ArrayList<Folder> folderList;
-    private File capturedImagePath;
     private Button captureBtn;
     private Button nextBtn;
     private Button cancelBtn;
@@ -69,7 +65,7 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         listOfSelectedImages = new ArrayList<>();
         setOfSelectedImages = new TreeSet<>();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         folderSet = new TreeSet<>();
         folderList = new ArrayList<>();
@@ -150,8 +146,6 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         Bundle bundle = new Bundle();
         bundle.putParcelable("memory", memory);
         bundle.putStringArrayList("photos", listOfSelectedImages);
-        /*intent.putExtra("memory", memory);
-        intent.putStringArrayListExtra("photos", listOfSelectedImages);*/
         intent.putExtras(bundle);
         startActivity(intent);
     }

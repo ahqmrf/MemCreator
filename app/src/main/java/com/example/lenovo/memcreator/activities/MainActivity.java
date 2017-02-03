@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initViews();
         manipulateViews();
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initViews() {
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void manipulateViews() {
-        mDrawerLayout.setDrawerListener(mToggle);
+        mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
     }

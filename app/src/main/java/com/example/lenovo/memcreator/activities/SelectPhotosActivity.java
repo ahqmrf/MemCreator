@@ -28,7 +28,7 @@ public class SelectPhotosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_photos);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String folder = getIntent().getStringExtra("folder");
 
         choiceList = (RecyclerView) findViewById(R.id.choice_list);

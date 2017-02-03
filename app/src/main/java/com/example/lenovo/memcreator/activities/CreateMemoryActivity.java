@@ -8,10 +8,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -27,17 +25,10 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.squareup.picasso.Picasso;
-
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Lenovo on 1/30/2017.
@@ -51,7 +42,6 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
     private EditText memoryText, memoryName;
     private ImageView avatarImageView;
     private Button captureBtn;
-    private File imageName;
     private Button createMemBtn;
     private MyDatabaseManager manager;
     private Memory memory = new Memory();
@@ -91,7 +81,7 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
 
         manager = new MyDatabaseManager(this, null, null, 1);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null)getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -113,12 +103,12 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         String text = memoryText.getText().toString();
         String memName = memoryName.getText().toString();
 
-        if (memName == null | memName.equals("") | memName.length() == 0) {
+        if (memName.equals("") | memName.length() == 0) {
             Toast.makeText(this, "Memory name cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (text == null | text.equals("") | text.length() == 0) {
+        if (text.equals("") | text.length() == 0) {
             Toast.makeText(this, "Write something about this memory!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -178,19 +168,6 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
 
         }
 
-    }
-
-    /* Get the real path from the URI */
-    public String getPathFromURI(Uri contentUri) throws IllegalArgumentException {
-        String res = null;
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-        if (cursor.moveToFirst()) {
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            res = cursor.getString(column_index);
-        }
-        cursor.close();
-        return res;
     }
 
     public Uri getImageUri(Context inContext, Bitmap inImage) {

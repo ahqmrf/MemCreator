@@ -62,7 +62,7 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
                 .build();
         imageLoader.init(config);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getOverflowMenu();
         manager = new MyDatabaseManager(this, null, null, 1);
         initExtras();
@@ -130,7 +130,6 @@ public class ViewMemory extends AppCompatActivity implements View.OnClickListene
             View view = LayoutInflater.from(this).inflate(R.layout.flip_item, flipper, false);
             ImageView flipImage = (ImageView) view.findViewById(R.id.photo_item);
             flipImage.setOnClickListener(this);
-            //Picasso.with(this).load("file:" + path).placeholder(R.drawable.loading).into(flipImage);
             String uri = Uri.fromFile(new File(path)).toString();
             String decoded = Uri.decode(uri);
             imageLoader.displayImage(decoded, flipImage);

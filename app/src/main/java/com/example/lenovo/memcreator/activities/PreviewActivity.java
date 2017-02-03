@@ -30,7 +30,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preview);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         previewPhotoList = (RecyclerView) findViewById(R.id.pic_list);
         previewPhotoList.setLayoutManager(new GridLayoutManager(this, 3));

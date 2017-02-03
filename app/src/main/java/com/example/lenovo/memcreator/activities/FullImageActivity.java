@@ -34,14 +34,13 @@ public class FullImageActivity extends AppCompatActivity {
                 .build();
         imageLoader.init(config);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fullImage = (ImageView) findViewById(R.id.iv_full_image);
         String path = getIntent().getStringExtra("image_path");
         String uri = Uri.fromFile(new File(path)).toString();
         String decoded = Uri.decode(uri);
         imageLoader.displayImage(decoded, fullImage);
-        //Picasso.with(this).load("file:" + path).placeholder(R.drawable.loading).into(fullImage);
     }
 
     @Override

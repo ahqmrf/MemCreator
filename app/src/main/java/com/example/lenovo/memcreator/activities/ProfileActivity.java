@@ -17,7 +17,7 @@ public class ProfileActivity extends AppCompatActivity {
         manager = new MyDatabaseManager(this, null, null, 1);
         setContentView(R.layout.activity_profile);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
