@@ -13,6 +13,7 @@ import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.adapters.PreviewPhotoListAdapter;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Memory;
+import com.example.lenovo.memcreator.smartsolver.GridSpacingItemDecoration;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,10 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         adapter = new PreviewPhotoListAdapter(this, pathList);
         previewPhotoList.setAdapter(adapter);
+        int spanCount = 3; // 3 columns
+        int spacing = 3; // 3px
+        boolean includeEdge = false;
+        previewPhotoList.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
 
         doneBtn = (Button) findViewById(R.id.btn_done);
         doneBtn.setOnClickListener(this);

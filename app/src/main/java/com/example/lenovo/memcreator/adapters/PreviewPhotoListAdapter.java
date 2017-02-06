@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
+import com.example.lenovo.memcreator.widgets.SquareImageView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -53,10 +54,6 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String photo = itemList.get(position);
-        int width= context.getResources().getDisplayMetrics().widthPixels / 3 - 20;
-
-        holder.layout.getLayoutParams().height = width;
-        holder.layout.getLayoutParams().width = width;
         File file = new File(photo);
         if(file.exists()) {
             String uri = Uri.fromFile(file).toString();
@@ -76,13 +73,13 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public FrameLayout layout;
-        public ImageView previewPhotoIV;
+        public SquareImageView previewPhotoIV;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             layout = (FrameLayout) itemView.findViewById(R.id.preview_photo_layout);
-            previewPhotoIV = (ImageView) itemView.findViewById(R.id.preview_photo);
+            previewPhotoIV = (SquareImageView) itemView.findViewById(R.id.preview_photo);
 
             previewPhotoIV.setOnClickListener(new View.OnClickListener() {
                 @Override

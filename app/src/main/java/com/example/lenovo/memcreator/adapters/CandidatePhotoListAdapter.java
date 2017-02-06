@@ -8,10 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
+import com.example.lenovo.memcreator.models.PhotoItem;
+import com.example.lenovo.memcreator.widgets.SquareImageView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -29,11 +32,11 @@ import java.util.TreeSet;
 public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePhotoListAdapter.MyViewHolder> {
 
     private Context context;
-    private ArrayList<String> itemList;
+    private ArrayList<PhotoItem> itemList;
     private Set<Integer> selectedIndices = new TreeSet<>();
     public ImageLoader imageLoader = ImageLoader.getInstance();
 
-    public CandidatePhotoListAdapter(Context context, ArrayList<String> itemList) {
+    public CandidatePhotoListAdapter(Context context, ArrayList<PhotoItem> itemList) {
         this.context = context;
         this.itemList = itemList;
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
@@ -55,11 +58,11 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
         this.context = context;
     }
 
-    public ArrayList<String> getItemList() {
+    public ArrayList<PhotoItem> getItemList() {
         return itemList;
     }
 
-    public void setItemList(ArrayList<String> itemList) {
+    public void setItemList(ArrayList<PhotoItem> itemList) {
         this.itemList = itemList;
     }
 
@@ -74,13 +77,9 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        String photo = itemList.get(position);
-        int width= context.getResources().getDisplayMetrics().widthPixels / 3 - 20;
-
-        holder.layout.getLayoutParams().height = width;
-        holder.layout.getLayoutParams().width = width;
-        File file = new File(photo);
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        final PhotoItem photo = itemList.get(position);
+        File file = new File(photo.getPath());
         if(file.exists()) {
             String uri = Uri.fromFile(file).toString();
             String decoded = Uri.decode(uri);
@@ -89,6 +88,23 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
         else {
             holder.candidatePhotoIV.setImageResource(R.drawable.loading);
         }
+
+        holder.box.setOnCheckedChangeListener(null);
+        holder.box.setChecked(photo.isSelected());
+        holder.box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                itemList.get(holder.getAdapterPosition()).setSelected(isChecked);
+                if(isChecked) {
+                    selectedIndices.add(holder.getAdapterPosition());
+                }
+                else {
+                    if(selectedIndices.contains(holder.getAdapterPosition())) {
+                        selectedIndices.remove(holder.getAdapterPosition());
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -99,40 +115,25 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public FrameLayout layout;
-        public ImageView candidatePhotoIV;
+        public SquareImageView candidatePhotoIV;
         public CheckBox box;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(final View itemView) {
             super(itemView);
 
             layout = (FrameLayout) itemView.findViewById(R.id.candidate_photo_layout);
-            candidatePhotoIV = (ImageView) itemView.findViewById(R.id.candidate_photo);
+            candidatePhotoIV = (SquareImageView) itemView.findViewById(R.id.candidate_photo);
 
             candidatePhotoIV.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, FullImageActivity.class);
-                    intent.putExtra("image_path", itemList.get(getAdapterPosition()));
+                    intent.putExtra("image_path", itemList.get(getAdapterPosition()).getPath());
                     context.startActivity(intent);
                 }
             });
 
             box = (CheckBox) itemView.findViewById(R.id.btn_select);
-
-            box.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CheckBox checkBox = (CheckBox)v;
-                    if(checkBox.isChecked()) {
-                        selectedIndices.add(getAdapterPosition());
-                    }
-                    else {
-                        if(selectedIndices.contains(getAdapterPosition())) {
-                            selectedIndices.remove(getAdapterPosition());
-                        }
-                    }
-                }
-            });
         }
     }
 }

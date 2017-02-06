@@ -11,17 +11,21 @@ import android.widget.Button;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.adapters.CandidatePhotoListAdapter;
+import com.example.lenovo.memcreator.models.PhotoItem;
+import com.example.lenovo.memcreator.smartsolver.GridSpacingItemDecoration;
+import com.example.lenovo.memcreator.smartsolver.SpacesItemDecoration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-public class SelectPhotosActivity extends AppCompatActivity {
+public class SelectPhotosActivity extends AppCompatActivity{
 
     private RecyclerView choiceList;
     private CandidatePhotoListAdapter adapter;
-    private ArrayList<String> paths;
+    private ArrayList<PhotoItem> itemList;
     private Button doneBtn;
+    TreeSet<Integer> set;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +34,10 @@ public class SelectPhotosActivity extends AppCompatActivity {
         if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         String folder = getIntent().getStringExtra("folder");
 
+        set = new TreeSet<>();
+
         choiceList = (RecyclerView) findViewById(R.id.choice_list);
-        paths = new ArrayList<>();
+        itemList = new ArrayList<>();
         File file = new File(folder);
         File fileList[] = file.listFiles();
         for (File pic : fileList) {
@@ -41,15 +47,21 @@ public class SelectPhotosActivity extends AppCompatActivity {
                     || path.endsWith(".bmp") || path.endsWith(".BMP")
                     || path.endsWith(".jpg") || path.endsWith(".JPG")
                     || path.endsWith(".gif") || path.endsWith(".GIF")) {
-                paths.add(path);
+                PhotoItem item = new PhotoItem();
+                item.setPath(path);
+                item.setSelected(false);
+                itemList.add(item);
             }
 
         }
 
-        adapter = new CandidatePhotoListAdapter(this, paths);
+        adapter = new CandidatePhotoListAdapter(this, itemList);
         choiceList.setLayoutManager(new GridLayoutManager(this, 3));
         choiceList.setAdapter(adapter);
-
+        int spanCount = 3; // 3 columns
+        int spacing = 3; // 3px
+        boolean includeEdge = false;
+        choiceList.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
         doneBtn = (Button) findViewById(R.id.btn_done);
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,10 +84,10 @@ public class SelectPhotosActivity extends AppCompatActivity {
 
 
     private ArrayList<String> getList() {
-        TreeSet<Integer> set = adapter.getSelectedIndices();
+        set = adapter.getSelectedIndices();
         ArrayList<String> list = new ArrayList<>();
         for (int i : set) {
-            list.add(paths.get(i));
+            list.add(itemList.get(i).getPath());
         }
         return list;
     }

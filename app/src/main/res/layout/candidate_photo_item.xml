@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="150dp"
-    android:layout_height="150dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="4dp"
     android:id="@+id/candidate_photo_layout">
 
-        <ImageView
+        <com.example.lenovo.memcreator.widgets.SquareImageView
             android:id="@+id/candidate_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/moments"
+            android:src="@drawable/loading"
+            android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
 
         <CheckBox
@@ -22,6 +22,7 @@
             android:layout_marginRight="-5dp"
             android:layout_marginTop="-5dp"
             tools:ignore="RtlHardcoded"
+            android:checked="false"
             android:theme="@style/MyCheckBox"/>
 
 </FrameLayout>

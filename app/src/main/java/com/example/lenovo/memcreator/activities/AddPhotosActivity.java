@@ -21,6 +21,7 @@ import com.example.lenovo.memcreator.adapters.FolderListAdapter;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 import com.example.lenovo.memcreator.models.Folder;
 import com.example.lenovo.memcreator.models.Memory;
+import com.example.lenovo.memcreator.smartsolver.GridSpacingItemDecoration;
 
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -105,7 +106,10 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         adapter = new FolderListAdapter(this, folderList, this);
         folderListView.setLayoutManager(new GridLayoutManager(this, 3));
         folderListView.setAdapter(adapter);
-
+        int spanCount = 3; // 3 columns
+        int spacing = 3; // 3px
+        boolean includeEdge = false;
+        folderListView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
     }
 
     @Override

@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="5dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
     android:weightSum="9"
     tools:context="com.example.lenovo.memcreator.activities.PreviewActivity">
 
@@ -40,6 +42,7 @@
         <Button
             android:id="@+id/btn_done"
             android:layout_marginLeft="3dp"
+            android:layout_marginRight="5dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

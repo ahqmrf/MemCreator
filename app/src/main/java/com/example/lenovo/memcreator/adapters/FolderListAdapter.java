@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.SelectPhotosActivity;
 import com.example.lenovo.memcreator.models.Folder;
+import com.example.lenovo.memcreator.widgets.SquareImageView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -61,10 +62,6 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
 
     @Override
     public void onBindViewHolder(FolderViewHolder holder, int position) {
-        int width = context.getResources().getDisplayMetrics().widthPixels;
-        int size = width / 3 - 15;
-        holder.folderLayout.getLayoutParams().width = size;
-        holder.folderLayout.getLayoutParams().height = size;
         Folder folder = folderList.get(position);
         holder.folderName.setText(folder.getFolderName());
         File file = new File(folder.getIconPath());
@@ -87,14 +84,14 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
 
         public FrameLayout folderLayout;
         public TextView folderName;
-        public ImageView folderIcon;
+        public SquareImageView folderIcon;
 
         public FolderViewHolder(View itemView) {
             super(itemView);
 
             folderLayout = (FrameLayout) itemView.findViewById(R.id.folder_layout);
             folderName = (TextView) itemView.findViewById(R.id.tv_folder_name);
-            folderIcon = (ImageView) itemView.findViewById(R.id.iv_folder_icon);
+            folderIcon = (SquareImageView) itemView.findViewById(R.id.iv_folder_icon);
             folderLayout.setOnClickListener(this);
         }
 
