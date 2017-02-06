@@ -124,7 +124,7 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
                 @Override
                 public void onGlobalLayout() {
                     photoList.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    size = photoList.getMeasuredWidth() / 3;
+                    size = photoList.getMeasuredWidth() / 2;
                     candidatePhotoIV.getLayoutParams().height = candidatePhotoIV.getLayoutParams().width = size;
                 }
             });

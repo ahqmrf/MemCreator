@@ -54,9 +54,9 @@ public class SelectPhotosActivity extends AppCompatActivity{
         }
 
         adapter = new CandidatePhotoListAdapter(this, itemList);
-        choiceList.setLayoutManager(new GridLayoutManager(this, 3));
+        choiceList.setLayoutManager(new GridLayoutManager(this, 2));
         choiceList.setAdapter(adapter);
-        int spanCount = 3; // 3 columns
+        int spanCount = 2; // 2 columns
         int spacing = 3; // 3px
         boolean includeEdge = false;
         choiceList.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));

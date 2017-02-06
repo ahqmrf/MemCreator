@@ -34,7 +34,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
         if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         previewPhotoList = (RecyclerView) findViewById(R.id.pic_list);
-        previewPhotoList.setLayoutManager(new GridLayoutManager(this, 3));
+        previewPhotoList.setLayoutManager(new GridLayoutManager(this, 2));
 
         Bundle extras = getIntent().getExtras();
 
@@ -43,7 +43,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         adapter = new PreviewPhotoListAdapter(this, pathList);
         previewPhotoList.setAdapter(adapter);
-        int spanCount = 3; // 3 columns
+        int spanCount = 2; // 2 columns
         int spacing = 3; // 3px
         boolean includeEdge = false;
         previewPhotoList.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));

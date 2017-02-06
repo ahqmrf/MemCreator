@@ -82,7 +82,7 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
                 @Override
                 public void onGlobalLayout() {
                     listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    size = listView.getMeasuredWidth() / 3;
+                    size = listView.getMeasuredWidth() / 2;
                     previewPhotoIV.getLayoutParams().height = previewPhotoIV.getLayoutParams().width = size;
                 }
             });
