@@ -2,16 +2,15 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.ViewTreeObserver;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.example.lenovo.memcreator.models.PhotoItem;
@@ -21,7 +20,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
@@ -63,7 +61,7 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.candidate_photo_item, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, parent);
     }
 
     @Override
@@ -89,8 +87,9 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
         public FrameLayout layout;
         public SquareImageView candidatePhotoIV;
         public CheckBox box;
+        public int size;
 
-        public MyViewHolder(final View itemView) {
+        public MyViewHolder(final View itemView, final ViewGroup photoList) {
             super(itemView);
 
             layout = (FrameLayout) itemView.findViewById(R.id.candidate_photo_layout);
@@ -104,13 +103,7 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
                     context.startActivity(intent);
                 }
             });
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-            int reqSize = (width - 6) / 3;
-            candidatePhotoIV.getLayoutParams().height = candidatePhotoIV.getLayoutParams().width = reqSize;
+
 
             box = (CheckBox) itemView.findViewById(R.id.btn_select);
 
@@ -123,6 +116,16 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
                     } else {
                         selectedPositions.remove(getAdapterPosition());
                     }
+                }
+            });
+
+            ViewTreeObserver vto = photoList.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    photoList.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    size = photoList.getMeasuredWidth() / 3;
+                    candidatePhotoIV.getLayoutParams().height = candidatePhotoIV.getLayoutParams().width = size;
                 }
             });
         }

@@ -2,25 +2,19 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.example.lenovo.memcreator.widgets.SquareImageView;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -48,7 +42,7 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.preview_photo_item, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, parent);
     }
 
     @Override
@@ -66,8 +60,9 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
 
         public FrameLayout layout;
         public SquareImageView previewPhotoIV;
+        public int size;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, final ViewGroup listView) {
             super(itemView);
 
             layout = (FrameLayout) itemView.findViewById(R.id.preview_photo_layout);
@@ -82,13 +77,16 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
                 }
             });
 
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-            int reqSize = (width - 6) / 3;
-            previewPhotoIV.getLayoutParams().width = previewPhotoIV.getLayoutParams().height = reqSize;
+            ViewTreeObserver vto = listView.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    listView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    size = listView.getMeasuredWidth() / 3;
+                    previewPhotoIV.getLayoutParams().height = previewPhotoIV.getLayoutParams().width = size;
+                }
+            });
+
         }
     }
 }

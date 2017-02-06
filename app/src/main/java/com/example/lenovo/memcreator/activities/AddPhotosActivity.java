@@ -13,6 +13,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -103,11 +104,12 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         }
 
         folderListView = (RecyclerView) findViewById(R.id.folder_list);
+        ViewTreeObserver vto = folderListView.getViewTreeObserver();
         adapter = new FolderListAdapter(this, folderList, this);
         folderListView.setLayoutManager(new GridLayoutManager(this, 3));
         folderListView.setAdapter(adapter);
         int spanCount = 3; // 3 columns
-        int spacing = 3; // 50px
+        int spacing = 3; // 3px
         boolean includeEdge = false;
         folderListView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
     }

@@ -1,30 +1,21 @@
 package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Point;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
-import com.example.lenovo.memcreator.activities.SelectPhotosActivity;
 import com.example.lenovo.memcreator.models.Folder;
 import com.example.lenovo.memcreator.widgets.SquareImageView;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -57,7 +48,7 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
     @Override
     public FolderViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.folder_item, parent, false);
-        return new FolderViewHolder(view);
+        return new FolderViewHolder(view, parent);
     }
 
     @Override
@@ -78,22 +69,25 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
         public FrameLayout folderLayout;
         public TextView folderName;
         public SquareImageView folderIcon;
+        public int size;
 
-        public FolderViewHolder(View itemView) {
+        public FolderViewHolder(View itemView, final ViewGroup folderListView) {
             super(itemView);
 
             folderLayout = (FrameLayout) itemView.findViewById(R.id.folder_layout);
             folderName = (TextView) itemView.findViewById(R.id.tv_folder_name);
             folderIcon = (SquareImageView) itemView.findViewById(R.id.iv_folder_icon);
             folderLayout.setOnClickListener(this);
+            ViewTreeObserver vto = folderListView.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    folderListView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    size = folderListView.getMeasuredWidth() / 3;
+                    folderIcon.getLayoutParams().height = folderIcon.getLayoutParams().width = size;
+                }
+            });
 
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            Display display = wm.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-            int reqSize = (width - 6) / 3;
-            folderIcon.getLayoutParams().height = folderIcon.getLayoutParams().width = reqSize;
         }
 
         @Override

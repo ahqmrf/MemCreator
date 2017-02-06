@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 
 import com.example.lenovo.memcreator.R;
@@ -35,6 +36,7 @@ public class PreviewActivity extends AppCompatActivity implements View.OnClickLi
 
         previewPhotoList = (RecyclerView) findViewById(R.id.pic_list);
         previewPhotoList.setLayoutManager(new GridLayoutManager(this, 3));
+
         Bundle extras = getIntent().getExtras();
 
         memory = extras.getParcelable("memory");
