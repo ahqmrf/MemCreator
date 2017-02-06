@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.models.Folder;

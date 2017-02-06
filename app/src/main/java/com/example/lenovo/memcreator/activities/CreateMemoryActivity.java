@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import java.text.SimpleDateFormat;
@@ -53,15 +54,6 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_memory);
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                // .writeDebugLogs() // Remove for release app
-                .build();
-        imageLoader.init(config);
 
         selectImageBtn = (Button) findViewById(R.id.btn_add_image);
         selectImageBtn.setOnClickListener(this);

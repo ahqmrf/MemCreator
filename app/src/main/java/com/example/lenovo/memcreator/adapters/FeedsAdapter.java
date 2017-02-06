@@ -41,15 +41,6 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
     public FeedsAdapter(Context context, ArrayList<Memory> itemList) {
         this.context = context;
         this.itemList = itemList;
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                // .writeDebugLogs() // Remove for release app
-                .build();
-        imageLoader.init(config);
     }
 
 
@@ -73,7 +64,6 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
                 if(file.exists()) {
                     String uri = Uri.fromFile(file).toString();
                     String decoded = Uri.decode(uri);
-                    //Picasso.with(context).load("file:" + memory.getIcon()).placeholder(R.drawable.loading).into(holder.memoryIcon);
                     imageLoader.displayImage(decoded, holder.memoryIcon);
                 }
                 else {

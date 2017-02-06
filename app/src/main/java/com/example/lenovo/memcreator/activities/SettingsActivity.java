@@ -1,8 +1,9 @@
 package com.example.lenovo.memcreator.activities;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.database.MyDatabaseManager;
 
