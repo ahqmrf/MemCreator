@@ -2,23 +2,24 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Point;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.example.lenovo.memcreator.models.PhotoItem;
 import com.example.lenovo.memcreator.widgets.SquareImageView;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,21 +34,18 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
 
     private Context context;
     private ArrayList<PhotoItem> itemList;
-    private Set<Integer> selectedIndices = new TreeSet<>();
-    public ImageLoader imageLoader = ImageLoader.getInstance();
+    private Set<Integer> selectedPositions;
+    private ImageLoader imageLoader = ImageLoader.getInstance();
+    private DisplayImageOptions displayImageOptions;
 
     public CandidatePhotoListAdapter(Context context, ArrayList<PhotoItem> itemList) {
         this.context = context;
         this.itemList = itemList;
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                // .writeDebugLogs() // Remove for release app
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.loading)
+                .showImageOnFail(R.drawable.loading)
                 .build();
-        imageLoader.init(config);
+        selectedPositions = new TreeSet<>();
     }
 
     public Context getContext() {
@@ -58,16 +56,8 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
         this.context = context;
     }
 
-    public ArrayList<PhotoItem> getItemList() {
-        return itemList;
-    }
-
-    public void setItemList(ArrayList<PhotoItem> itemList) {
-        this.itemList = itemList;
-    }
-
-    public TreeSet<Integer> getSelectedIndices() {
-        return (TreeSet<Integer>) selectedIndices;
+    public Set<Integer> getSelectedPositions() {
+        return selectedPositions;
     }
 
     @Override
@@ -79,32 +69,14 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final PhotoItem photo = itemList.get(position);
-        File file = new File(photo.getPath());
-        if(file.exists()) {
-            String uri = Uri.fromFile(file).toString();
-            String decoded = Uri.decode(uri);
-            imageLoader.displayImage(decoded, holder.candidatePhotoIV);
-        }
-        else {
-            holder.candidatePhotoIV.setImageResource(R.drawable.loading);
-        }
-
-        holder.box.setOnCheckedChangeListener(null);
-        holder.box.setChecked(photo.isSelected());
-        holder.box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        imageLoader.displayImage(photo.getPathUri(), holder.candidatePhotoIV, displayImageOptions, new SimpleImageLoadingListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                itemList.get(holder.getAdapterPosition()).setSelected(isChecked);
-                if(isChecked) {
-                    selectedIndices.add(holder.getAdapterPosition());
-                }
-                else {
-                    if(selectedIndices.contains(holder.getAdapterPosition())) {
-                        selectedIndices.remove(holder.getAdapterPosition());
-                    }
-                }
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+                super.onLoadingFailed(imageUri, view, failReason);
             }
         });
+
+        holder.box.setChecked(photo.isSelected());
     }
 
     @Override
@@ -132,8 +104,27 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
                     context.startActivity(intent);
                 }
             });
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int reqSize = (width - 6) / 3;
+            candidatePhotoIV.getLayoutParams().height = candidatePhotoIV.getLayoutParams().width = reqSize;
 
             box = (CheckBox) itemView.findViewById(R.id.btn_select);
+
+            box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    itemList.get(getAdapterPosition()).setSelected(isChecked);
+                    if (isChecked) {
+                        selectedPositions.add(getAdapterPosition());
+                    } else {
+                        selectedPositions.remove(getAdapterPosition());
+                    }
+                }
+            });
         }
     }
 }

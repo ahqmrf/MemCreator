@@ -2,11 +2,14 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
@@ -14,6 +17,7 @@ import com.example.lenovo.memcreator.R;
 import com.example.lenovo.memcreator.activities.FullImageActivity;
 import com.example.lenovo.memcreator.widgets.SquareImageView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -29,20 +33,16 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
 
     private Context context;
     private ArrayList<String> itemList;
-    public ImageLoader imageLoader = ImageLoader.getInstance();
+    private ImageLoader imageLoader = ImageLoader.getInstance();
+    private DisplayImageOptions displayImageOptions;
 
     public PreviewPhotoListAdapter(Context context, ArrayList<String> itemList) {
         this.context = context;
         this.itemList = itemList;
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                // .writeDebugLogs() // Remove for release app
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.loading)
+                .showImageOnFail(R.drawable.loading)
                 .build();
-        imageLoader.init(config);
     }
 
     @Override
@@ -54,15 +54,7 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         String photo = itemList.get(position);
-        File file = new File(photo);
-        if(file.exists()) {
-            String uri = Uri.fromFile(file).toString();
-            String decoded = Uri.decode(uri);
-            imageLoader.displayImage(decoded, holder.previewPhotoIV);
-        }
-        else {
-            holder.previewPhotoIV.setImageResource(R.drawable.loading);
-        }
+        imageLoader.displayImage(Uri.fromFile(new File(photo)).toString(), holder.previewPhotoIV, displayImageOptions);
     }
 
     @Override
@@ -89,7 +81,14 @@ public class PreviewPhotoListAdapter extends RecyclerView.Adapter<PreviewPhotoLi
                     context.startActivity(intent);
                 }
             });
-            
+
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int reqSize = (width - 6) / 3;
+            previewPhotoIV.getLayoutParams().width = previewPhotoIV.getLayoutParams().height = reqSize;
         }
     }
 }

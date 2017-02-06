@@ -95,7 +95,7 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
                             || path.endsWith(".bmp") || path.endsWith(".BMP")
                             || path.endsWith(".jpg") || path.endsWith(".JPG")
                             || path.endsWith(".gif") || path.endsWith(".GIF")) {
-                        folderList.add(new Folder(key, path));
+                        folderList.add(new Folder(key, f.getAbsolutePath(), Uri.fromFile(f).toString()));
                         break;
                     }
                 }
@@ -107,7 +107,7 @@ public class AddPhotosActivity extends AppCompatActivity implements View.OnClick
         folderListView.setLayoutManager(new GridLayoutManager(this, 3));
         folderListView.setAdapter(adapter);
         int spanCount = 3; // 3 columns
-        int spacing = 3; // 3px
+        int spacing = 3; // 50px
         boolean includeEdge = false;
         folderListView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
     }

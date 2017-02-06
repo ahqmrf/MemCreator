@@ -8,9 +8,9 @@
 
         <com.example.lenovo.memcreator.widgets.SquareImageView
             android:id="@+id/candidate_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:src="@drawable/loading"
             android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
 

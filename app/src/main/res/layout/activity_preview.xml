@@ -7,15 +7,16 @@
     android:orientation="vertical"
     android:layout_marginLeft="5dp"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp"
+    android:layout_marginRight="5dp"
     android:weightSum="9"
+    android:background="@drawable/background"
     tools:context="com.example.lenovo.memcreator.activities.PreviewActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pic_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="3dp"
         android:layout_weight="8" />
 
 

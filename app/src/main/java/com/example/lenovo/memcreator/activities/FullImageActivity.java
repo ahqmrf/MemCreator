@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.example.lenovo.memcreator.R;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -18,34 +19,23 @@ public class FullImageActivity extends AppCompatActivity {
 
     private ImageView fullImage;
     public ImageLoader imageLoader = ImageLoader.getInstance();
+    private DisplayImageOptions displayImageOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_image);
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                // .writeDebugLogs() // Remove for release app
-                .build();
-        imageLoader.init(config);
 
         if(getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.loading)
+                .showImageOnFail(R.drawable.loading)
+                .build();
+
         fullImage = (ImageView) findViewById(R.id.iv_full_image);
         String path = getIntent().getStringExtra("image_path");
-        File file = new File(path);
-        if(file.exists()) {
-            String uri = Uri.fromFile(file).toString();
-            String decoded = Uri.decode(uri);
-            imageLoader.displayImage(decoded, fullImage);
-        }
-        else {
-            fullImage.setImageResource(R.drawable.loading);
-        }
+        imageLoader.displayImage(Uri.fromFile(new File(path)).toString(), fullImage, displayImageOptions);
     }
 
     @Override

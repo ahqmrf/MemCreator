@@ -2,11 +2,14 @@ package com.example.lenovo.memcreator.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,6 +19,7 @@ import com.example.lenovo.memcreator.activities.SelectPhotosActivity;
 import com.example.lenovo.memcreator.models.Folder;
 import com.example.lenovo.memcreator.widgets.SquareImageView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
@@ -29,9 +33,10 @@ import java.util.ArrayList;
 
 public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.FolderViewHolder> {
 
+    private DisplayImageOptions displayImageOptions;
     private Context context;
     private ArrayList<Folder> folderList;
-    public ImageLoader imageLoader = ImageLoader.getInstance();
+    private ImageLoader imageLoader = ImageLoader.getInstance();
 
     public interface Callback {
         void onFolderClick(String path);
@@ -41,15 +46,10 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
         this.context = context;
         this.folderList = folderList;
         mCallback = callback;
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this.context)
-                .threadPriority(Thread.NORM_PRIORITY - 2)
-                .denyCacheImageMultipleSizesInMemory()
-                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
-                .diskCacheSize(50 * 1024 * 1024) // 50 Mb
-                .tasksProcessingOrder(QueueProcessingType.LIFO)
-                // .writeDebugLogs() // Remove for release app
+        displayImageOptions = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(R.drawable.loading)
+                .showImageOnFail(R.drawable.loading)
                 .build();
-        imageLoader.init(config);
     }
 
     private Callback mCallback;
@@ -64,15 +64,8 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
     public void onBindViewHolder(FolderViewHolder holder, int position) {
         Folder folder = folderList.get(position);
         holder.folderName.setText(folder.getFolderName());
-        File file = new File(folder.getIconPath());
-        if(file.exists()) {
-            String uri = Uri.fromFile(file).toString();
-            String decoded = Uri.decode(uri);
-            imageLoader.displayImage(decoded, holder.folderIcon);
-        }
-        else {
-            holder.folderIcon.setImageResource(R.drawable.loading);
-        }
+        imageLoader.displayImage(folder.getIconPathUri(), holder.folderIcon, displayImageOptions);
+
     }
 
     @Override
@@ -93,6 +86,14 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
             folderName = (TextView) itemView.findViewById(R.id.tv_folder_name);
             folderIcon = (SquareImageView) itemView.findViewById(R.id.iv_folder_icon);
             folderLayout.setOnClickListener(this);
+
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int reqSize = (width - 6) / 3;
+            folderIcon.getLayoutParams().height = folderIcon.getLayoutParams().width = reqSize;
         }
 
         @Override

@@ -8,6 +8,7 @@ public class Folder {
     private String folderPath;
     private String iconPath;
     private String folderName;
+    private String iconPathUri;
 
     public String getFolderName() {
         String tokens[] = folderPath.split("/");
@@ -19,9 +20,10 @@ public class Folder {
        this.folderName = folderName;
     }
 
-    public Folder(String folderPath, String iconPath) {
+    public Folder(String folderPath, String iconPath, String iconPathUri) {
         this.folderPath = folderPath;
         this.iconPath = iconPath;
+        this.iconPathUri = iconPathUri;
     }
 
     public String getFolderPath() {
@@ -38,5 +40,13 @@ public class Folder {
 
     public void setIconPath(String iconPath) {
         this.iconPath = iconPath;
+    }
+
+    public String getIconPathUri() {
+        return iconPathUri;
+    }
+
+    public void setIconPathUri(String iconPathUri) {
+        this.iconPathUri = iconPathUri;
     }
 }
