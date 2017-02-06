@@ -70,7 +70,7 @@ public class FeedsAdapter extends RecyclerView.Adapter<FeedsAdapter.MyViewHolder
                     holder.memoryIcon.setImageResource(R.drawable.loading);
                 }
             } else {
-                holder.memoryIcon.setImageResource(R.drawable.moments);
+                holder.memoryIcon.setImageResource(R.drawable.no_image);
             }
 
             holder.memoryTitle.setText(memory.getName());

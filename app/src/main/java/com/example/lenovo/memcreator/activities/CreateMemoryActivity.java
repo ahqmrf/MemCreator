@@ -73,6 +73,17 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
         manager = new MyDatabaseManager(this, null, null, 1);
 
         if(getSupportActionBar() != null)getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        avatarImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(avatarIconPath != null) {
+                    Intent intent = new Intent(CreateMemoryActivity.this, FullImageActivity.class);
+                    intent.putExtra("image_path", avatarIconPath);
+                    startActivity(intent);
+                }
+            }
+        });
     }
 
     @Override
@@ -140,6 +151,7 @@ public class CreateMemoryActivity extends AppCompatActivity implements View.OnCl
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
                     String path = getRealPathFromURI(this, selectedImageUri);
+                    avatarIconPath = path;
                     String text = "Selected: " + path;
                     Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
                     avatarImageView.setImageBitmap(BitmapFactory.decodeFile(path));
