@@ -113,8 +113,10 @@ public class CandidatePhotoListAdapter extends RecyclerView.Adapter<CandidatePho
                     itemList.get(getAdapterPosition()).setSelected(isChecked);
                     if (isChecked) {
                         selectedPositions.add(getAdapterPosition());
+                        box.setBackgroundResource(R.drawable.ic_check_box_black_24dp);
                     } else {
                         selectedPositions.remove(getAdapterPosition());
+                        box.setBackgroundResource(R.drawable.ic_check_box_outline_blank_black_24dp);
                     }
                 }
             });
