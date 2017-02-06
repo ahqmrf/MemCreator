@@ -84,6 +84,7 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Fo
                     folderListView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     size = folderListView.getMeasuredWidth() / 3;
                     folderIcon.getLayoutParams().height = folderIcon.getLayoutParams().width = size;
+                    folderName.getLayoutParams().width = size;
                 }
             });
 
