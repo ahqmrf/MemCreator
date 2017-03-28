@@ -23,6 +23,13 @@ public class App extends Application {
                 .diskCacheSize(50 * 1024 * 1024) // 50 Mb
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 // .writeDebugLogs() // Remove for release app
+
+
+
+                // I am an Assa party B)
+
+
+
                 .build();
         ImageLoader.getInstance().init(config);
     }
