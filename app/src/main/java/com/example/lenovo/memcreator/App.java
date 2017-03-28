@@ -30,6 +30,8 @@ public class App extends Application {
 
 
 
+
+
                 .build();
         ImageLoader.getInstance().init(config);
     }
